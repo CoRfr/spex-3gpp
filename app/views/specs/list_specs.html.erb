@@ -1,0 +1,9 @@
+<h1><%= @serie.index %> Series</h1>
+<h2><%= @serie.subject %></h2>
+<ul>
+    <% for spec in @serie.documents %>
+        <li><%= link_to "#{spec.name}", specs_res_url( {
+            :serie => spec.spec_serie.index,
+            :spec => spec.name.gsub('.','_') } ) %>: <%= spec.title %></li>
+    <% end %>
+</ul>

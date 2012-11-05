@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  index: 1
+  spec_scope_id: 1
+  subject: MyString
+
+two:
+  index: 1
+  spec_scope_id: 1
+  subject: MyString

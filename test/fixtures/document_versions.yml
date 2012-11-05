@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  major: 1
+  technical: 1
+  editorial: 1
+
+two:
+  major: 1
+  technical: 1
+  editorial: 1
