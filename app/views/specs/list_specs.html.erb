@@ -1,9 +1,14 @@
-<h1><%= @serie.index %> Series</h1>
-<h2><%= @serie.subject %></h2>
-<ul>
-    <% for spec in @serie.documents %>
-        <li><%= link_to "#{spec.name}", specs_res_url( {
-            :serie => spec.spec_serie.index,
-            :spec => spec.name.gsub('.','_') } ) %>: <%= spec.title %></li>
-    <% end %>
-</ul>
+<div class="block data-block">
+    <h4><%= @serie.index %> Series: <i><%= @serie.subject %></i></h4>
+    <table class="data-table">
+        <% for spec in @serie.documents %>
+            <tr>
+                <td class="link-column">
+                    <%= link_to "#{spec.name}", specs_res_url( {
+                    :serie => spec.spec_serie.index,
+                    :spec => spec.name.gsub('.','_') } ) %></td>
+                <td><%= spec.title %></td>
+            </tr>
+        <% end %>
+    </table>
+</div>

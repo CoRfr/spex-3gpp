@@ -1,0 +1,116 @@
+/*
+ **= require reset
+ **= require_self
+ **= require_tree .
+ */
+
+body
+    margin: 0
+    padding: 0
+    background: #ededed image-url('sidebar.png') repeat-y left
+    font: 75%/1.5 sans-serif
+
+a
+    color: lightslategray
+    text-decoration: none
+    &:hover
+        color: #0060a3
+    &:visited
+        opacity: .8
+        filter: alpha(opacity = 80)
+
+    img
+        border-width: 0px
+
+#header
+    width: 100%
+    height: 30px
+    background: image-url('header.png')
+    line-height: 13px
+
+    img.logo
+        float: left
+
+    span.main-title
+        color: #fcfcfc
+        font-weight: bold
+        font-size: 12px
+        margin-left: 10px
+        margin-top: 1px
+
+    span.sub-title
+        color: #ccc
+        font-weight: bold
+        font-size: 10px
+        margin-left: 10px
+
+#nav
+    width: 100%
+    height: 24px
+    background: image-url('nav.png') repeat-x
+    -webkit-box-shadow:  0px 3px 7px 0px rgba(0, 0, 0, 0.5)
+    box-shadow:  0px 3px 7px 0px rgba(0, 0, 0, 0.5)
+
+    span.left-arrow
+        display: block
+        background: #282828 image-url('left-arrow.png') no-repeat right
+        min-width: 60px
+        float: left
+        height: 24px
+        line-height: 25px
+        text-indent: 10px
+        padding-right: 10px
+        color: #eee
+
+        span.v_v
+            font-size: 80%
+
+        span.v_release
+            color: white
+            font-weight: bold
+            font-size: 110%
+
+#sidebar
+    float: left
+    width: 35px
+
+    div.icon
+        width: 16px
+        margin: 7px auto
+
+        a
+            width: 16px
+            text-align: center
+
+            img
+                opacity: 0.7
+
+        a:hover img
+            opacity: 1.0
+
+h1, h2, h3, h4, h5
+    font-family: Arial, sans-serif
+
+table.data-table
+
+    th, td
+        padding: 5px 15px
+        text-align: left
+        border-bottom: 1px solid #ccc
+
+    th
+        border-width: 2px
+
+    td
+        color: #666
+
+    tr:last-child th,
+    tr:last-child td
+        border-bottom: none
+
+    tr:nth-child(even)
+        background: #eee
+
+    td.link-column
+        width: 50px
+        text-align: center

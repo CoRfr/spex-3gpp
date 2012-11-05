@@ -25,9 +25,19 @@ class Document < ActiveRecord::Base
     return name
   end
 
+  def name_3gpp
+    n  = "%02d%02d" % [spec_serie.index, spec_number]
+    n += "-#{spec_part}" if !spec_part.nil?
+    n
+  end
+
   def self.find_by_desc(desc)
     name = self.desc_to_name(desc)
     self.find_by_name(name)
+  end
+
+  def info_page_url
+    "http://www.3gpp.org/ftp/Specs/html-info/#{name_3gpp}.htm"
   end
 
   def parse_no(spec_no)

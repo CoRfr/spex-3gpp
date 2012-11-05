@@ -22,6 +22,18 @@ class DocumentFile < ActiveRecord::Base
         DocumentFile.get_local_path(document_version, format)
     end
 
+    PREFIX = %W(To Go Mo Ko o).freeze
+
+    def size_h
+      s = size.to_f
+      i = PREFIX.length - 1
+      while s > 512 && i > 0
+        i -= 1
+        s /= 1024
+      end
+      ((s > 9 || s.modulo(1) < 0.1 ? '%d' : '%.1f') % s) + ' ' + PREFIX[i]
+    end
+
     def analyze
         sha1 = Digest::SHA1.new
 

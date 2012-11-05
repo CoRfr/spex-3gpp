@@ -1,8 +1,17 @@
-<ul>
+<ul id="scopes" class="data-block">
     <% for scope in SpecScope.all %>
-        <li><h2><%= scope.scope %></h2></li>
-        <% for serie in scope.spec_series %>
-            <li><%= link_to "#{serie.index} Series", specs_res_url(:serie => serie.index) %>: <%= serie.subject %></li>
-        <% end %>
+        <li class="block">
+            <%  cls = "header"
+                cls += "collapsed" if scope.id != 2 %>
+            <h4 class="<%= cls %>"><a><%= scope.scope %></a></h4>
+            <table class="data-table">
+                <% for serie in scope.spec_series %>
+                    <tr>
+                        <td><%= link_to "#{serie.index} Series", specs_res_url(:serie => serie.index) %></td>
+                        <td><%= serie.subject %></td>
+                    </tr>
+                <% end %>
+            </table>
+        </li>
     <% end %>
 </ul>

@@ -25,6 +25,7 @@ class SpecsController < ApplicationController
                     @version = @spec.document_versions.where(version_desc).first
 
                     if params["format"].nil?
+                        @content_partial = "version_layout"
                         render :version
                     else
                         respond_to do |format|

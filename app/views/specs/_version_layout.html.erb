@@ -1,0 +1,36 @@
+<div id="header">
+    <%= image_tag "logo.png", :class => "logo" %>
+    <span class="main-title"><%= @spec.name %></span><br />
+    <span class="sub-title"><%= @spec.title %></span>
+</div>
+<div id="nav">
+  <span class="left-arrow">
+    <span class="v_v">v</span><span class="v_release"><%= @version.editorial %></span>.<%= @version.major %>.<%= @version.technical %>
+  </span>
+  <%= @page_title %>
+</div>
+<div id="body">
+  <div id="sidebar">
+    <% for format in [:pdf, :doc] %>
+        <div class="icon">
+            <% if @version.has_format? format %>
+                <%= file = @version.get_file format
+                    link_to image_tag("icon-#{format}.png"), specs_res_url( {
+                        :serie => @spec.spec_serie.index,
+                        :spec => @spec.name.gsub('.','_'),
+                        :version => @version.version.gsub('.','_'),
+                        :format => file.format } ) %>
+            <% else %>
+                <%= link_to image_tag("icon-#{format}-gray.png"), specs_res_url( {
+                        :serie => @spec.spec_serie.index,
+                        :spec => @spec.name.gsub('.','_'),
+                        :version => @version.version.gsub('.','_'),
+                        :format => format } ) %>
+            <% end %>
+        </div>
+    <% end %>
+  </div>
+  <div id="content">
+    <%= yield %>
+  </div>
+</div>
