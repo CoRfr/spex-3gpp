@@ -1,24 +1,32 @@
-<div class="block data-block">
-    <h4><%= @spec.name %>: <i><%= @spec.title %></i></h4>
-    <h5><%= @version.version %></h5>
-    <table class="data-table">
-        <% for format in [:pdf, :doc] %>
-            <tr><td>
-                <% if @version.has_format? format %>
-                    <%= file = @version.get_file format
-                        link_to file.format, specs_res_url( {
-                            :serie => @spec.spec_serie.index,
-                            :spec => @spec.name.gsub('.','_'),
-                            :version => @version.version.gsub('.','_'),
-                            :format => file.format } ) %> (<%= file.size_h %>)
-                <% else %>
-                    <%= link_to "Retreive #{format}", specs_res_url( {
-                            :serie => @spec.spec_serie.index,
-                            :spec => @spec.name.gsub('.','_'),
-                            :version => @version.version.gsub('.','_'),
-                            :format => format } ) %>
-                <% end %>
-            </td></tr>
-        <% end %>
-    </table>
-</div>
+<% if !@version.has_format? :html %>
+    <div class="block data-block">
+        <h4><%= @spec.name %>: <i><%= @spec.title %></i></h4>
+        <h5><%= @version.version %></h5>
+        <table class="data-table">
+            <% for format in [:html, :pdf, :doc] %>
+                <tr><td>
+                    <% if @version.has_format? format %>
+                        <%= file = @version.get_file format
+                            link_to file.format, specs_res_url( {
+                                :serie => @spec.spec_serie.index,
+                                :spec => @spec.name.gsub('.','_'),
+                                :version => @version.version.gsub('.','_'),
+                                :format => file.format } ) %> (<%= file.size_h %>)
+                    <% else %>
+                        <%= link_to "Retreive #{format}", specs_res_url( {
+                                :serie => @spec.spec_serie.index,
+                                :spec => @spec.name.gsub('.','_'),
+                                :version => @version.version.gsub('.','_'),
+                                :format => format } ) %>
+                    <% end %>
+                </td></tr>
+            <% end %>
+        </table>
+    </div>
+<% else %>
+    <iframe src="<%= specs_res_url( {
+                                :serie => @spec.spec_serie.index,
+                                :spec => @spec.name.gsub('.','_'),
+                                :version => @version.version.gsub('.','_'),
+                                :format => :html } ) %>"></iframe>
+<% end %>

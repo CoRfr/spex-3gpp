@@ -37,7 +37,7 @@ class DocumentVersion < ActiveRecord::Base
   end
 
   def has_format?(format)
-    puts "Has format ? #{(document_files.where(:format => format).count != 0)}"
+    # puts "Has format ? #{(document_files.where(:format => format).count != 0)}"
     (document_files.where(:format => format).count != 0)
   end
 
@@ -48,8 +48,9 @@ class DocumentVersion < ActiveRecord::Base
   def retreive_format(format)
 
     case format
-      when :pdf then return retreive_pdf
-      when :doc then return retreive_doc
+      when :pdf   then return retreive_pdf
+      when :html  then return retreive_html
+      when :doc   then return retreive_doc
       else raise "Unknown format #{format}"
     end
 
@@ -108,6 +109,26 @@ class DocumentVersion < ActiveRecord::Base
     end
 
     false
+  end
+
+  def retreive_html
+    puts "Getting HTML".green
+
+    if !has_format? :pdf and !retreive_pdf
+      return false
+    end
+
+    path_pdf = DocumentFile.get_local_path(self, :pdf)
+    path_html = DocumentFile.get_local_path(self, :html)
+
+    begin
+      if `pdf2htmlEX #{path_pdf} --dest-dir #{Pathname(path_html).dirname}`
+        doc_file = document_files.new
+        doc_file.format = :html
+        doc_file.analyze
+        doc_file.save
+      end
+    end
   end
 
   def retreive_doc

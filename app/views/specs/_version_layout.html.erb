@@ -11,7 +11,7 @@
 </div>
 <div id="body">
   <div id="sidebar">
-    <% for format in [:pdf, :doc] %>
+    <% for format in [:html, :pdf, :doc] %>
         <div class="icon">
             <% if @version.has_format? format %>
                 <%= file = @version.get_file format

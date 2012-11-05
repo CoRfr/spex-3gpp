@@ -6,12 +6,33 @@
         <% for vers in @spec.document_versions %>
             <% if last_rel < vers.editorial %>
                 <% last_rel = vers.editorial %>
-                <tr><td colspan="2" class="release"><%= vers.release.name %></td></tr>
+                <tr><td colspan="4" class="release"><%= vers.release.name %></td></tr>
             <% end %>
-            <tr><td><%= link_to vers.version, specs_res_url( {
-                :serie => @spec.spec_serie.index,
-                :spec => @spec.name.gsub('.','_'),
-                :version => vers.version.gsub('.','_') } ) %></td></tr>
+            <tr>
+                <td><%= link_to vers.version, specs_res_url( {
+                    :serie => @spec.spec_serie.index,
+                    :spec => @spec.name.gsub('.','_'),
+                    :version => vers.version.gsub('.','_') } ) %>
+                </td>
+                <% for format in [:html, :pdf, :doc] %>
+                    <td class="icon-link">
+                        <% if vers.has_format? format %>
+                            <%= file = vers.get_file format
+                                link_to image_tag("icon-#{format}.png"), specs_res_url( {
+                                    :serie => @spec.spec_serie.index,
+                                    :spec => @spec.name.gsub('.','_'),
+                                    :version => vers.version.gsub('.','_'),
+                                    :format => file.format } ) %>
+                        <% else %>
+                            <%= link_to image_tag("icon-#{format}-gray.png"), specs_res_url( {
+                                    :serie => @spec.spec_serie.index,
+                                    :spec => @spec.name.gsub('.','_'),
+                                    :version => vers.version.gsub('.','_'),
+                                    :format => format } ) %>
+                        <% end %>
+                    </td>
+                <% end %>
+            </tr>
         <% end %>
     </table>
 </div>

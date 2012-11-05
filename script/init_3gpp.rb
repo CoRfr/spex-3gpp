@@ -91,43 +91,46 @@ def init_spec_matrix
             spec_title = elmt.elements[1].text.strip
             spec_wg = elmt.elements[2].text.strip
 
-            # For each Document
-            doc = Document.find_or_initialize_by_name(spec_no)
-            if doc.new_record?
-                puts "\tCreating document #{spec_no}".yellow
-                # If we need to make this
-                doc.title = spec_title
-                doc.parse_no(spec_no)
+            if ARGV.length == 0 or spec_no.starts_with? ARGV[0]
 
-                doc.save!
-            else
-                puts "\tFound document #{spec_no} => #{doc.id}".cyan
-
-                if doc.spec_serie_id.nil?
+                # For each Document
+                doc = Document.find_or_initialize_by_name(spec_no)
+                if doc.new_record?
+                    puts "\tCreating document #{spec_no}".yellow
+                    # If we need to make this
+                    doc.title = spec_title
                     doc.parse_no(spec_no)
+
                     doc.save!
+                else
+                    puts "\tFound document #{spec_no} => #{doc.id}".cyan
+
+                    if doc.spec_serie_id.nil?
+                        doc.parse_no(spec_no)
+                        doc.save!
+                    end
                 end
-            end
 
-            # For each Version
-            idx = 0
-            elmt.elements[3..-1].each do |elmt|
-                if (not elmt.text.empty?) and (elmt.text != "none")
-                    version_hash = DocumentVersion.parse_version(elmt.text)
+                # For each Version
+                idx = 0
+                elmt.elements[3..-1].each do |elmt|
+                    if (not elmt.text.empty?) and (elmt.text != "none")
+                        version_hash = DocumentVersion.parse_version(elmt.text)
 
-                    if doc.document_versions.where(version_hash).count == 0
-                        puts "\t\tCreating version #{version_hash}".yellow
-                        version = doc.document_versions.create(version_hash)
-                        version.release = releases[idx]
-                        version.save!
-                    else
-                        puts "\t\tFound version #{version_hash}".cyan
+                        if doc.document_versions.where(version_hash).count == 0
+                            puts "\t\tCreating version #{version_hash}".yellow
+                            version = doc.document_versions.create(version_hash)
+                            version.release = releases[idx]
+                            version.save!
+                        else
+                            puts "\t\tFound version #{version_hash}".cyan
+                        end
+
+                        puts doc.document_versions.where(version_hash).first.retreive_pdf
                     end
 
-                    puts doc.document_versions.where(version_hash).first.retreive_pdf
+                    idx += 1
                 end
-
-                idx += 1
             end
 
         else
@@ -145,7 +148,7 @@ if __FILE__ == $0
 
     a = Time.now
     
-    init_spec_numbering()
+    #init_spec_numbering()
     init_spec_matrix()
 
     b = Time.now

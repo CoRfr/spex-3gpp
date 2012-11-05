@@ -29,12 +29,11 @@ class SpecsController < ApplicationController
                         render :version
                     else
                         respond_to do |format|
-                            format.html { render :version }
-                            format.any(:pdf, :doc) {
+                            format.any(:html, :pdf, :doc) {
                                 file_format = params["format"].to_sym
 
                                 if @version.has_format?(file_format) or @version.retreive_format(file_format)
-                                    send_file @version.get_file(file_format).local_path
+                                    send_file @version.get_file(file_format).local_path, :disposition => 'inline'
                                 else
                                     redirect_to Rails.application.routes.url_helpers.specs_res_url( {
                                         :serie => params["serie"],

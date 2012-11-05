@@ -28,6 +28,8 @@ gem 'colored'
 gem 'nokogiri'
 gem 'rubyzip'
 
+gem 'wirble'
+
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
