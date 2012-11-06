@@ -7,7 +7,7 @@ class Document < ActiveRecord::Base
 
   def self.parse_no(spec_no)
 
-    m = spec_no.match(/(\d+)[\._](\d+)(?:-(\d))?/)
+    m = spec_no.match(/(\d+)[\._](\d+)(?:-(\d))?(U)?/)
 
     res = {
         :serie => m[1].to_i,
@@ -15,13 +15,15 @@ class Document < ActiveRecord::Base
     }
 
     res[:part] = m[3].to_i if not m[3].nil?
+    res[:u] = true if not m[4].nil?
 
     res
   end
 
   def self.desc_to_name(desc)
-    name = "%02d.%d" % [desc[:serie],desc[:number]]
-    name += "-#{desc[:part]}" if !desc[:part].nil?
+    name  = "%02d.%02d" % [desc[:serie],desc[:number]]
+    name += "-#{desc[:part]}" if not desc[:part].nil?
+    name += "U" if desc[:u]
     return name
   end
 

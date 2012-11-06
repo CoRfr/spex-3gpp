@@ -26,6 +26,9 @@ class SpecsController < ApplicationController
 
                     if params["format"].nil?
                         @content_partial = "version_layout"
+                        if @version.has_format? :html
+                            @doc_html = DocumentPdfHtml.new @version.get_file(:html).local_path
+                        end
                         render :version
                     else
                         respond_to do |format|

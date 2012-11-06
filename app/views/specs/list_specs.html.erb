@@ -1,13 +1,47 @@
 <div class="block data-block">
     <h4><%= @serie.index %> Series: <i><%= @serie.subject %></i></h4>
     <table class="data-table">
-        <% for spec in @serie.documents %>
-            <tr>
+        <% group = nil %>
+
+        <% i = 0 %>
+        <% doc_count = @serie.documents.count %>
+        <% @serie.documents.each_with_index do |spec, index| %>
+            <% block_end = false %>
+
+            <% # Bug with multi-spaces in documents %>
+            <% if not spec.title[/\s{2,}/].nil? %>
+                <% spec.title = spec.title.gsub(/\s{2,}/,' ') %>
+                <% spec.save %>
+            <% end %>
+
+            <% if !group.nil? and spec.title.start_with? group %>
+                <% title = "⇒ " + spec.title.sub(group,'').strip %>
+                <% if (index+1) < doc_count and !(@serie.documents[index+1].title.start_with? group) %>
+                    <% block_end = true %>
+                <% end %>
+            <% elsif spec.title.include? ';' %>
+                <% group = spec.title[/[^;]+;/] %>
+                <% if (index+1) < doc_count and @serie.documents[index+1].title.start_with? group %>
+                    <% title = "⇒ " + spec.title.sub(group,'').strip %>
+                    <tr class="sub-header"><td colspan="2"><%= group[/[^;]+/] %></td></tr>
+                <% else %>
+                    <% group = nil %>
+                    <% title = spec.title %>
+                <% end %>
+            <% else %>
+                <% group = nil %>
+                <% title = spec.title %>
+            <% end %>
+
+            <% tr_class = nil %>
+            <% tr_class = "block-part" if !group.nil? %>
+            <% tr_class = "block-end" if block_end %>
+            <tr <%= "class=\"#{tr_class}\"".html_safe if tr_class != nil %>>
                 <td class="link-column">
                     <%= link_to "#{spec.name}", specs_res_url( {
                     :serie => spec.spec_serie.index,
                     :spec => spec.name.gsub('.','_') } ) %></td>
-                <td><%= spec.title %></td>
+                <td><%= title %></td>
             </tr>
         <% end %>
     </table>

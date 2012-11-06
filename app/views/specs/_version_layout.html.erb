@@ -7,7 +7,12 @@
   <span class="left-arrow">
     <span class="v_v">v</span><span class="v_release"><%= @version.editorial %></span>.<%= @version.major %>.<%= @version.technical %>
   </span>
-  <%= @page_title %>
+  <%= @doc_html.page_count if !@doc_html.nil? %>
+  <form>
+    <% if @version.has_format? :html %>
+      <label for="page_jump">Page</label><input id="page_jump" type="text" value="0" class="form-text" />
+    <% end %>
+  </form>
 </div>
 <div id="body">
   <div id="sidebar">

@@ -1,4 +1,4 @@
-<% if !@version.has_format? :html %>
+<% if @doc_html.nil? %>
     <div class="block data-block">
         <h4><%= @spec.name %>: <i><%= @spec.title %></i></h4>
         <h5><%= @version.version %></h5>
@@ -24,9 +24,8 @@
         </table>
     </div>
 <% else %>
-    <iframe src="<%= specs_res_url( {
-                                :serie => @spec.spec_serie.index,
-                                :spec => @spec.name.gsub('.','_'),
-                                :version => @version.version.gsub('.','_'),
-                                :format => :html } ) %>"></iframe>
+    <%= @doc_html.page_count %>
+    <div id="pdf_document">
+        <%= @doc_html.html_content.html_safe %>
+    </div>
 <% end %>

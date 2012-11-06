@@ -140,8 +140,9 @@ class DocumentVersion < ActiveRecord::Base
     url_path += "%02d_series/" % spec_serie
 
     if document.spec_part.nil?
-        url_path += "%02d.%02d/" % [spec_serie,document.spec_number]
-        url_path += "%02d%02d-%s.zip" % [spec_serie,document.spec_number,version(:letters)]
+        suffix = document.name.end_with?("U") ? "U" : ""
+        url_path += "%02d.%02d%s/" % [spec_serie,document.spec_number,suffix]
+        url_path += "%02d%02d%s-%s.zip" % [spec_serie,document.spec_number,suffix,version(:letters)]
       else
         url_path += "%02d.%02d-%d/" % [spec_serie,document.spec_number,document.spec_part]
         url_path += "%02d%02d-%d-%s.zip" % [spec_serie,document.spec_number,document.spec_part,version(:letters)]

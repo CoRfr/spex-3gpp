@@ -1,0 +1,145 @@
+form fieldset {
+  margin: 0 0 10px 0;
+  padding: 0 0 10px 0;
+  font-size: 14px;
+  border: 0;
+  border-bottom: 1px solid #eee;
+  }
+form fieldset a {
+  font-size: 12px;
+  border-bottom: 1px dashed gray;
+  color: gray;
+}
+form fieldset a:hover {
+  color: rgb(67, 107, 149);
+  border-color: rgb(67, 107, 149);
+}
+form fieldset.form-actions {
+  margin: 0 0 0 20%;
+  padding: 0;
+  border: none;
+  }
+form fieldset.check {
+  padding-left: 20%;  
+  }
+form fieldset label {
+  float: left;
+  width: 20%;
+  margin: 4px 0 5px 0;
+  font-size: 12px;
+  }
+form fieldset table label {
+    float: none;
+    width: auto;
+    margin: 0 0 0 10px;
+    vertical-align: middle;
+  }
+form fieldset table input {
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+    *overflow: hidden;
+}
+
+form fieldset table td {
+    vertical-align: middle;
+    line-height: 15px;
+}
+form fieldset.check label {
+  display: inline;
+  float: none;
+  width: auto;
+  font-weight: normal;
+  }
+form fieldset.radio ul li label {
+  display: inline;
+  float: none;
+  width: auto;
+  font-weight: normal;
+  }
+form input.form-text,
+form textarea {
+  display: block;
+  font-size: 12px;
+  border: 1px solid #ddd;
+  background: #f5f5f5;
+  -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.05);
+  -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,.05);
+  -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.05);
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+form fieldset input.form-text,
+form fieldset textarea {
+  width: 50%;
+  padding: 5px;
+  }
+form fieldset input.form-text:focus {
+  border: 1px solid #ccc;
+  background: #fff;
+  }
+form fieldset textarea {
+  height: 150px;
+  }
+form fieldset select {
+  min-width: 25%;
+  margin: 0;
+  font-size: 12px;
+  }
+form fieldset.radio ul {
+  margin: 5px 0 0 20%;
+  }
+form fieldset.radio ul li {
+  margin: 0 0 5px 0;
+  }
+form fieldset.radio ul li:last-child {
+  margin: 0;
+  }
+form fieldset p.form-help {
+  margin: 5px 0 0 20%;
+  font-size: 12px;
+  color: #999;
+  }
+form input[type="submit"] {
+  margin: 0;
+  padding: 5px 10px;
+  font-size: 12px;  
+  font-weight: bold;
+  border: 1px solid #ccc;
+  background: #eee;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  }
+form input[type="submit"]:hover,
+form input[type="submit"]:focus {
+  border: 1px solid #bbb;
+  background: #e5e5e5;
+  }
+form input[type="submit"]:active {
+  border: 1px solid #ccc;
+  background: #eee;
+  }
+@media screen and (max-width: 600px) {
+  form fieldset label {
+    display: block;
+    float: none;
+    width: auto;
+    margin: 0 0 5px 0;
+    }
+  form fieldset.form-actions,
+  form fieldset.check,
+  form fieldset.radio ul,
+  form fieldset p.form-help {
+    margin-left: 0;
+    padding-left: 0;
+    }
+  form fieldset input.form-text,
+  form fieldset textarea {
+    width: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    }
+  }

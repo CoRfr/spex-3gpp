@@ -2,7 +2,7 @@
     <% for scope in SpecScope.all %>
         <li class="block">
             <%  cls = "header"
-                cls += "collapsed" if scope.id != 2 %>
+                cls += " expanded" if scope.id == 3 %>
             <h4 class="<%= cls %>"><a><%= scope.scope %></a></h4>
             <table class="data-table">
                 <% for serie in scope.spec_series %>

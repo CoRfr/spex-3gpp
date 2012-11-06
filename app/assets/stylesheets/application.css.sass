@@ -1,5 +1,6 @@
 /*
  **= require reset
+ **= require form
  **= require_self
  **= require_tree .
  */
@@ -51,6 +52,7 @@ a
     background: image-url('nav.png') repeat-x
     -webkit-box-shadow:  0px 3px 7px 0px rgba(0, 0, 0, 0.5)
     box-shadow:  0px 3px 7px 0px rgba(0, 0, 0, 0.5)
+    color: white
 
     span.left-arrow
         display: block
@@ -118,3 +120,22 @@ table.data-table
     td.link-column
         width: 50px
         text-align: center
+
+    tr
+        border-left: 1px solid transparent
+        border-right: 1px solid transparent
+
+    tr.block-part
+        border-left: 1px solid #888
+        border-right: 1px solid #888
+
+    tr.block-end
+        @extend tr.block-part
+        td
+            border-bottom-color: #888
+
+    tr.sub-header td
+        font-weight: bold
+        padding: 5px 5px
+        border-bottom-color: #888
+
