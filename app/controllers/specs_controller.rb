@@ -2,10 +2,19 @@ class SpecsController < ApplicationController
     respond_to :html, :doc, :pdf
 
     def specs
+        @navs = []
+
+        @page_name = "Specs"
+        @url_options = {}
+
         if params["serie"].nil?
             render :list_series
         else
             @serie = SpecSerie.find_by_index(params["serie"].to_i)
+
+            @navs.push({ :name => @page_name, :link => specs_res_url(@url_options) })
+            @page_name = "#{@serie.index} Series"
+            @url_options[:serie] = params["serie"]
 
             if params["spec"].nil?
                 render :list_specs
@@ -18,11 +27,19 @@ class SpecsController < ApplicationController
                     return
                 end
 
+                @navs.push({ :name => @page_name, :link => specs_res_url(@url_options) })
+                @page_name = @spec.name
+                @url_options[:spec] = params["spec"]
+                
                 if params["version"].nil?
                     render :list_versions
                 else
                     version_desc = DocumentVersion.parse_version(params["version"])
                     @version = @spec.document_versions.where(version_desc).first
+
+                    @navs.push({ :name => @page_name, :link => specs_res_url(@url_options) })
+                    @page_name = @version.version
+                    @url_options[:version] = params["version"]
 
                     if params["format"].nil?
                         @content_partial = "version_layout"

@@ -7,7 +7,12 @@
   <span class="left-arrow">
     <%= @left_title %>
   </span>
-  <%= @page_title %>
+  <nav class="breadcrumb">
+    <% @navs.each do |entry| %>
+      <%= link_to entry[:name], entry[:link] %> /
+    <% end %>
+    <strong><%= @page_name %></strong>
+  </nav>
 </div>
 <div id="body">
   <div id="sidebar">
