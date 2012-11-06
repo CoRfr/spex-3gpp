@@ -10,7 +10,7 @@ function update_page_nb(page_nb) {
 
 function show_page(page_nb) {
     // console.debug("show_page " + page_nb);
-    if( current_page() != parseInt(page_nb)) {
+    if(!is_page_visible(page_nb)) {
         update_page_nb(page_nb);
 
         current_offset = $("#pdf-main").scrollTop();
@@ -55,7 +55,7 @@ $(document).ready(function() {
     });
 
     $("#page_jump").change( function() {
-        // console.debug("page_jump changed => " + page_change_in_progress);
+        console.debug("page_jump changed => ");// + page_change_in_progress);
         show_page( $(this).val() );
     });
 

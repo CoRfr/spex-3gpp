@@ -102,7 +102,7 @@ a
             opacity: 1.0
 
 #content
-    margin-top: 30px
+    margin-top: 60px
     
 h1, h2, h3, h4, h5
     font-family: Arial, sans-serif
@@ -120,6 +120,20 @@ table.data-table
     td
         color: #666
 
+    tr
+        border-left: 2px solid transparent
+        border-right: 1px solid transparent
+
+    tr.block-part
+        border-left: 2px solid #888
+        border-right: 1px solid #888
+        background: #fcfcfc
+
+    tr.block-end
+        @extend tr.block-part
+        td
+            border-bottom-color: #888
+
     tr:last-child th,
     tr:last-child td
         border-bottom: none
@@ -134,20 +148,8 @@ table.data-table
         width: 50px
         text-align: center
 
-    tr
-        border-left: 1px solid transparent
-        border-right: 1px solid transparent
-
-    tr.block-part
-        border-left: 1px solid #888
-        border-right: 1px solid #888
-
-    tr.block-end
-        @extend tr.block-part
-        td
-            border-bottom-color: #888
-
     tr.sub-header td
         font-weight: bold
         padding: 5px 5px
         border-bottom-color: #888
+        background: white

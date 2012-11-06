@@ -6,7 +6,7 @@
         <% for vers in @spec.document_versions %>
             <% if last_rel < vers.editorial %>
                 <% last_rel = vers.editorial %>
-                <tr><td colspan="4" class="release"><%= vers.release.name %></td></tr>
+                <tr class="sub-header"><td colspan="4"><%= vers.release.name %></td></tr>
             <% end %>
             <tr>
                 <td><%= link_to vers.version, specs_res_url( {
