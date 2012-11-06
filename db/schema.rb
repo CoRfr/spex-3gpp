@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121105120333) do
+ActiveRecord::Schema.define(:version => 20121106135728) do
 
   create_table "document_files", :force => true do |t|
     t.datetime "created_at",          :null => false
@@ -20,9 +20,20 @@ ActiveRecord::Schema.define(:version => 20121105120333) do
     t.string   "format"
     t.string   "sha1"
     t.integer  "size"
+    t.integer  "nb_pages"
   end
 
   add_index "document_files", ["document_version_id"], :name => "index_document_files_on_document_version_id"
+
+  create_table "document_tocs", :force => true do |t|
+    t.integer  "parent_id"
+    t.integer  "document_file_id"
+    t.integer  "level"
+    t.string   "title"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+    t.integer  "page"
+  end
 
   create_table "document_versions", :force => true do |t|
     t.integer  "major"

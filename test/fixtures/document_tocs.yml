@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  title: MyString
+  parent: 1
+  level: 1
+  document_file_id: 1
+
+two:
+  title: MyString
+  parent: 1
+  level: 1
+  document_file_id: 1

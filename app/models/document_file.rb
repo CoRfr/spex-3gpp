@@ -3,6 +3,8 @@ class DocumentFile < ActiveRecord::Base
 
     belongs_to :document_version
 
+    has_many :document_tocs
+
     def self.get_filename(doc_version, format)
         name  = "%02d%02d" % [doc_version.document.spec_serie.index, doc_version.document.spec_number]
         name += "-#{doc_version.document.spec_part}" if !doc_version.document.spec_part.nil?

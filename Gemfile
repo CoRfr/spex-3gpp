@@ -27,6 +27,7 @@ gem 'awesome_print'
 gem 'colored'
 gem 'nokogiri'
 gem 'rubyzip'
+gem 'poppler'
 
 gem 'wirble'
 

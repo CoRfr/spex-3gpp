@@ -26,9 +26,19 @@ class SpecsController < ApplicationController
 
                     if params["format"].nil?
                         @content_partial = "version_layout"
+
+                        @doc_pdf = @version.get_file(:pdf)
+                        if @doc_pdf.document_tocs.count == 0
+                            @version.analyze_pdf
+                        end
+
                         if @version.has_format? :html
                             @doc_html = DocumentPdfHtml.new @version.get_file(:html).local_path
+                        elsif !@doc_pdf.nil?
+                            @version.retreive_format(:html)
+                            @doc_html = DocumentPdfHtml.new @version.get_file(:html).local_path
                         end
+
                         render :version
                     else
                         respond_to do |format|

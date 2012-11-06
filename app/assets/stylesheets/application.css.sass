@@ -28,6 +28,9 @@ a
     height: 30px
     background: image-url('header.png')
     line-height: 14px
+    position: fixed
+    top: 0px
+    z-index: 999
 
     img.logo
         float: left
@@ -53,6 +56,10 @@ a
     -webkit-box-shadow:  0px 3px 7px 0px rgba(0, 0, 0, 0.5)
     box-shadow:  0px 3px 7px 0px rgba(0, 0, 0, 0.5)
     color: white
+    position: fixed
+    top: 30px
+    opacity: 0.8
+    z-index: 1000
 
     span.left-arrow
         display: block
@@ -74,8 +81,11 @@ a
             font-size: 110%
 
 #sidebar
-    float: left
     width: 35px
+    position: fixed
+    top: 55px
+    left: 0px
+    z-index: 1001
 
     div.icon
         width: 16px
@@ -91,6 +101,9 @@ a
         a:hover img
             opacity: 1.0
 
+#content
+    margin-top: 30px
+    
 h1, h2, h3, h4, h5
     font-family: Arial, sans-serif
 
@@ -138,4 +151,3 @@ table.data-table
         font-weight: bold
         padding: 5px 5px
         border-bottom-color: #888
-

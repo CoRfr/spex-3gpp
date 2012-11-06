@@ -5,8 +5,8 @@ class DocumentPdfHtml
     end
 
     def html_content
-        content  = '<script type="text/javascript">' + js_content + '</script>'
-        content += '<style type="text/css">' + css_content + '</style>'
+        content  = js_content
+        content += css_content
         content += body_content
     end
 
