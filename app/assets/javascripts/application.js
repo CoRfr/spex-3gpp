@@ -53,7 +53,7 @@ $(document).ready(function() {
             
             $(title).removeAttr("href");
             
-            if(!$(this).hasClass('expanded'))
+            if(!$(this).parent().hasClass('expanded'))
             {
                 $(elmt_content).fadeOut('fast');
                 $(this).parent().addClass('collapsed')
@@ -61,19 +61,19 @@ $(document).ready(function() {
             
             $(title).data("child", elmt_content);
             $(title).click(function() {
-                if(!$(this).parent().hasClass('expanded'))
+                if(!$(this).parent().parent().hasClass('expanded'))
                 {
                     elmt = $(this).data("child");
                     $(elmt).fadeIn('fast');
-                    $(this).parent().addClass('expanded');
-                    $(this).parent().removeClass('collapsed');
+                    $(this).parent().parent().addClass('expanded');
+                    $(this).parent().parent().removeClass('collapsed');
                 }
                 else
                 {
                     elmt = $(this).data("child");
                     $(elmt).fadeOut('fast');
-                    $(this).parent().removeClass('expanded');
-                    $(this).parent().addClass('collapsed');
+                    $(this).parent().parent().removeClass('expanded');
+                    $(this).parent().parent().addClass('collapsed');
                 }        
             });
         }

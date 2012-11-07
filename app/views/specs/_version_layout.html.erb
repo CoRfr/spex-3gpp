@@ -1,11 +1,14 @@
 <div id="header">
     <%= image_tag "logo.png", :class => "logo" %>
-    <span class="main-title"><%= @spec.name %></span><br />
+    <span class="main-title"><%= link_to @spec.name, specs_res_url( {
+                        :serie => @spec.spec_serie.index } ), :title => "#{@spec.spec_serie.index} Series" %></span><br />
     <span class="sub-title"><%= @spec.title %></span>
 </div>
 <div id="nav">
   <span class="left-arrow">
-    <span class="v_v">v</span><span class="v_release"><%= @version.editorial %></span>.<%= @version.major %>.<%= @version.technical %>
+    <%= link_to ('<span class="v_v">v</span><span class="v_release">' + @version.editorial.to_s + '</span>.' + @version.major.to_s + '.' + @version.technical.to_s).html_safe, specs_res_url( {
+                        :serie => @spec.spec_serie.index,
+                        :spec => @spec.name.gsub('.','_') } ) %>
   </span>
   <form onsubmit="return false">
     <% if !@doc_html.nil? %>

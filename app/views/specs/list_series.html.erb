@@ -1,9 +1,9 @@
 <ul id="scopes" class="data-block">
     <% for scope in SpecScope.all %>
-        <li class="block">
-            <%  cls = "header"
-                cls += " expanded" if scope.id == 3 %>
-            <h4 class="<%= cls %>"><a><%= scope.scope %></a></h4>
+        <%  cls = "block"
+            cls += " expanded" if scope.id == 3 %>
+        <li class="<%= cls %>">
+            <h4 class="header"><a><%= scope.scope %></a></h4>
             <table class="data-table">
                 <% for serie in scope.spec_series %>
                     <tr>
