@@ -6,6 +6,7 @@ class SpecsController < ApplicationController
 
         @page_name = "Specs"
         @url_options = {}
+        @title = @page_name
 
         if params["serie"].nil?
             render :list_series
@@ -14,6 +15,7 @@ class SpecsController < ApplicationController
 
             @navs.push({ :name => @page_name, :link => specs_res_url(@url_options) })
             @page_name = "#{@serie.index} Series"
+            @title += " :: #{@page_name}"
             @url_options[:serie] = params["serie"]
 
             if params["spec"].nil?
@@ -29,6 +31,7 @@ class SpecsController < ApplicationController
 
                 @navs.push({ :name => @page_name, :link => specs_res_url(@url_options) })
                 @page_name = @spec.name
+                @title += " :: #{@page_name}"
                 @url_options[:spec] = params["spec"]
                 
                 if params["version"].nil?
@@ -39,6 +42,7 @@ class SpecsController < ApplicationController
 
                     @navs.push({ :name => @page_name, :link => specs_res_url(@url_options) })
                     @page_name = @version.version
+                    @title += " :: #{@page_name}"
                     @url_options[:version] = params["version"]
 
                     if params["format"].nil?
@@ -53,7 +57,10 @@ class SpecsController < ApplicationController
                             @doc_html = DocumentPdfHtml.new @version.get_file(:html).local_path
                         elsif !@doc_pdf.nil?
                             @version.retreive_format(:html)
-                            @doc_html = DocumentPdfHtml.new @version.get_file(:html).local_path
+                            html_file = @version.get_file(:html)
+                            if !html_file.nil?
+                                @doc_html = DocumentPdfHtml.new @version.get_file(:html).local_path
+                            end
                         end
 
                         render :version
