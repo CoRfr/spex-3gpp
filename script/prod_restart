@@ -1,0 +1,8 @@
+#!/bin/sh
+
+PORT=3011
+SITE_ENV=production
+SITE_ENV=development
+
+passenger stop -p $PORT
+passenger start -p $PORT -e $SITE_ENV -d
