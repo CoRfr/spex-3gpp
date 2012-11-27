@@ -1,7 +1,7 @@
 SpexV1::Application.routes.draw do
   # The priority is based upon order of creation:
   # first created -> highest priority.
-  default_url_options :host => "localhost:3000"
+  default_url_options :host => "specs.wgge.mstarsemi.fr"
 
   root :to => 'specs#specs'
   match 'specs(/:serie(/:spec(/:version(.:format))))', :to => "specs#specs", :as => 'specs_res'

@@ -58,46 +58,14 @@ class DocumentVersion < ActiveRecord::Base
   end
 
   def analyze_pdf
-
     pdf_file = get_file(:pdf)
 
-    if pdf_file.nil?
-      return nil
+    if !pdf_file.nil?
+      pdf_file.analyze_pdf
     end
-
-    doc = Poppler::Document.new(pdf_file.local_path.to_s)
-    indexer = Poppler::IndexIter.new(doc)
-
-    # Clean
-    pdf_file.document_tocs.delete_all
-
-    # Update page count
-    pdf_file.nb_pages ||= doc.n_pages
-    pdf_file.save
-
-    puts "This is the number of pages #{doc.n_pages}".cyan
-
-    pdf_walk_index(pdf_file, indexer)
   end
 
 private
-
-  def pdf_walk_index(pdf_file, indexer, parent = nil, depth = 0)
-
-    indexer.each do |i|
-
-        toc_entry = pdf_file.document_tocs.create
-        toc_entry.title = i.action.title
-        toc_entry.page = i.action.dest.page_num
-        toc_entry.parent = parent
-        toc_entry.level = depth
-        toc_entry.save
-
-        child = i.child
-
-        pdf_walk_index(pdf_file, child, toc_entry, depth + 1) if child.nil? == false and depth < 1
-    end
-  end
 
   # Get PDF from ETSI servers
   def retreive_pdf

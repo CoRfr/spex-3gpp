@@ -21,7 +21,12 @@ class Document < ActiveRecord::Base
   end
 
   def self.desc_to_name(desc)
-    name  = "%02d.%02d" % [desc[:serie],desc[:number]]
+    name  = if desc[:serie].to_i < 13
+              "%02d.%02d" % [desc[:serie],desc[:number]]
+            else
+              "%02d.%03d" % [desc[:serie],desc[:number]]
+            end
+            
     name += "-#{desc[:part]}" if not desc[:part].nil?
     name += "U" if desc[:u]
     return name

@@ -50,10 +50,56 @@ class DocumentFile < ActiveRecord::Base
             self.size = file.size
             self.sha1 = sha1.to_s
         end
+
+        case format
+            when :pdf then analyze_pdf
+        end
+    end
+
+
+    def analyze_pdf
+
+        if format != "pdf"
+          return false
+        end
+
+        doc = Poppler::Document.new(local_path.to_s)
+        indexer = Poppler::IndexIter.new(doc)
+
+        # Clean
+        document_tocs.delete_all
+
+        # Update page count
+        self.nb_pages ||= doc.n_pages
+        save
+
+        puts "This is the number of pages #{doc.n_pages}".cyan
+
+        pdf_walk_index(indexer)
+
+        true
     end
 
     def content
         File.read( local_path )
     end
 
+private
+
+    def pdf_walk_index(indexer, parent = nil, depth = 0)
+
+        indexer.each do |i|
+
+            toc_entry = document_tocs.create
+            toc_entry.title = i.action.title
+            toc_entry.page = i.action.dest.page_num
+            toc_entry.parent = parent
+            toc_entry.level = depth
+            toc_entry.save
+
+            child = i.child
+
+            pdf_walk_index(child, toc_entry, depth + 1) if child.nil? == false and depth < 1
+        end
+    end
 end

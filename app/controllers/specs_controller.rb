@@ -6,83 +6,96 @@ class SpecsController < ApplicationController
 
         @page_name = "Specs"
         @url_options = {}
-        @title = @page_name
+        @title = "X"
 
-        if params["serie"].nil?
-            render :list_series
-        else
-            @serie = SpecSerie.find_by_index(params["serie"].to_i)
-
-            @navs.push({ :name => @page_name, :link => specs_res_url(@url_options) })
-            @page_name = "#{@serie.index} Series"
-            @title += " :: #{@page_name}"
-            @url_options[:serie] = params["serie"]
-
-            if params["spec"].nil?
-                render :list_specs
+        begin
+            if params["serie"].nil?
+                # Display series list
+                render :list_series
             else
-                spec_desc = Document.parse_no(params["spec"])
-                @spec = Document.find_by_desc(spec_desc)
-
-                if @spec.nil?
-                    render :status => :not_found
-                    return
-                end
+                @serie = SpecSerie.find_by_index(params["serie"].to_i)
 
                 @navs.push({ :name => @page_name, :link => specs_res_url(@url_options) })
-                @page_name = @spec.name
+                @page_name = "#{@serie.index} Series"
                 @title += " :: #{@page_name}"
-                @url_options[:spec] = params["spec"]
-                
-                if params["version"].nil?
-                    render :list_versions
+                @url_options[:serie] = params["serie"]
+
+                if params["spec"].nil?
+                    # Display spec list
+                    render :list_specs
                 else
-                    version_desc = DocumentVersion.parse_version(params["version"])
-                    @version = @spec.document_versions.where(version_desc).first
+                    spec_desc = Document.parse_no(params["spec"])
+                    @spec = Document.find_by_desc(spec_desc)
+
+                    if @spec.nil?
+                        render :status => :not_found
+                        return
+                    end
 
                     @navs.push({ :name => @page_name, :link => specs_res_url(@url_options) })
-                    @page_name = @version.version
-                    @title += " :: #{@page_name}"
-                    @url_options[:version] = params["version"]
-
-                    if params["format"].nil?
-                        @content_partial = "version_layout"
-
-                        @doc_pdf = @version.get_file(:pdf)
-                        if @doc_pdf.document_tocs.count == 0
-                            @version.analyze_pdf
-                        end
-
-                        if @version.has_format? :html
-                            @doc_html = DocumentPdfHtml.new @version.get_file(:html).local_path
-                        elsif !@doc_pdf.nil?
-                            @version.retreive_format(:html)
-                            html_file = @version.get_file(:html)
-                            if !html_file.nil?
-                                @doc_html = DocumentPdfHtml.new @version.get_file(:html).local_path
-                            end
-                        end
-
-                        render :version
+                    @page_name = @spec.name
+                    @title = "X :: #{@page_name}"
+                    @url_options[:spec] = params["spec"]
+                    
+                    if params["version"].nil?
+                        # Display version list
+                        render :list_versions
                     else
-                        respond_to do |format|
-                            format.any(:html, :pdf, :doc) {
-                                file_format = params["format"].to_sym
+                        version_desc = DocumentVersion.parse_version(params["version"])
+                        @version = @spec.document_versions.where(version_desc).first
 
-                                if @version.has_format?(file_format) or @version.retreive_format(file_format)
-                                    send_file @version.get_file(file_format).local_path, :disposition => 'inline'
-                                else
-                                    redirect_to Rails.application.routes.url_helpers.specs_res_url( {
-                                        :serie => params["serie"],
-                                        :spec => params["spec"],
-                                        :version => params["version"]
-                                        } )
+                        @navs.push({ :name => @page_name, :link => specs_res_url(@url_options) })
+                        @page_name = @version.version
+                        @title += " :: #{@page_name}"
+                        @url_options[:version] = params["version"]
+
+                        # Display version
+
+                        if params["format"].nil?
+                            @content_partial = "version_layout"
+
+                            @doc_pdf = @version.get_file(:pdf)
+
+                            if not @doc_pdf.nil?
+                                if @doc_pdf.document_tocs.count == 0
+                                    @version.analyze_pdf
                                 end
-                            }
+
+                                if @version.has_format? :html
+                                    @doc_html = DocumentPdfHtml.new @version.get_file(:html).local_path
+                                elsif !@doc_pdf.nil?
+                                    @version.retreive_format(:html)
+                                    html_file = @version.get_file(:html)
+                                    if !html_file.nil?
+                                        @doc_html = DocumentPdfHtml.new @version.get_file(:html).local_path
+                                    end
+                                end
+                            end
+
+                            render :version
+                        else
+                            respond_to do |format|
+                                format.any(:html, :pdf, :doc) {
+                                    file_format = params["format"].to_sym
+
+                                    if @version.has_format?(file_format) or @version.retreive_format(file_format)
+                                        send_file @version.get_file(file_format).local_path, :disposition => 'inline'
+                                    else
+                                        redirect_to specs_res_url( {
+                                            :serie => params["serie"],
+                                            :spec => params["spec"],
+                                            :version => params["version"]
+                                            }),
+                                            :notice => "Unable to retreive format #{file_format}"
+                                    end
+                                }
+                            end
                         end
                     end
                 end
             end
+        rescue Exception => e
+            @exception = e
         end
     end
 end

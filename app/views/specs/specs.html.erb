@@ -1,1 +1,19 @@
-<%= params %>
+<% if not @exception.nil? %>
+    <div class="block data-block">
+        <div class="block-error">
+            <h4 style="color: red"><%= ap(@exception).html_safe %></h4>
+            <h5>Parameters</h5>
+            <table class="data-table">
+                <% params.each do |k,p| %>
+                    <tr><td><%= k  %> => <%= p %></tr>
+                <% end %>
+            </table>
+            <h5>Backtrace</h5>
+            <table class="data-table">
+                <% @exception.backtrace.each do |bt| %>
+                    <tr><td><%= bt  %></td></tr>
+                <% end %>
+            </table>
+        </div>
+    </div>
+<% end %>

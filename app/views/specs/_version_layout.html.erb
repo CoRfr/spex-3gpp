@@ -11,7 +11,7 @@
                         :spec => @spec.name.gsub('.','_') } ) %>
   </span>
   <form onsubmit="return false">
-    <% if !@doc_html.nil? %>
+    <% if !@doc_html.nil? and !@doc_pdf.nil? %>
       <input id="page_jump" type="text" value="1" class="form-text" /> / <span id="page_count"><%= @doc_pdf.nb_pages %></span>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <%= select_tag 'page_toc', options_from_collection_for_select(@doc_pdf.document_tocs, 'page', 'title') %>
@@ -40,6 +40,12 @@
     <% end %>
   </div>
   <div id="content">
+    <% if flash[:warning] or flash[:notice] %>
+      <div id="notice" <% if flash[:warning] %>class="warning"<% end %>>
+        <%= flash[:warning] || flash[:notice] %>
+      </div>
+    <% end %>
+    
     <%= yield %>
   </div>
 </div>
