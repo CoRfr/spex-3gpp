@@ -22,7 +22,7 @@ class Document < ActiveRecord::Base
   end
 
   def self.desc_to_name(desc)
-    name  = if desc[:serie].to_i < 13
+    name  = if desc[:serie].to_i < 13 or desc[:u]
               "%02d.%02d" % [desc[:serie],desc[:number]]
             else
               "%02d.%03d" % [desc[:serie],desc[:number]]
@@ -33,28 +33,30 @@ class Document < ActiveRecord::Base
     return name
   end
 
-  def name_3gpp
-    n  = "%02d" % spec_serie.index
-    n += ( spec_serie.index < 13 ? "%02d" : "%03d" ) % spec_number
-    n += "-#{spec_part}" if !spec_part.nil?
-    n
-  end
-
   def self.find_by_desc(desc)
     name = self.desc_to_name(desc)
     self.find_by_name(name)
+  end
+
+  def name_3gpp
+    desc = parse_no
+    n  = "%02d" % spec_serie.index
+    n += ( spec_serie.index < 13 or desc[:u] ? "%02d" : "%03d" ) % spec_number
+    n += "-#{spec_part}" if !spec_part.nil?
+    n += "U" if desc[:u]
+    n
   end
 
   def info_page_url
     "http://www.3gpp.org/ftp/Specs/html-info/#{name_3gpp}.htm"
   end
 
-  def parse_no(spec_no)
+  def parse_no
 
-    res = Document.parse_no(spec_no)
+    res = Document.parse_no(name)
 
     spec_serie = SpecSerie.find_by_index(res[:serie])
-    raise "Unable to find serie for #{spec_no}" if spec_serie.nil?
+    raise "Unable to find serie for #{name}" if spec_serie.nil?
 
     self.spec_serie_id = spec_serie.id
 
