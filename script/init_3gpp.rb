@@ -161,7 +161,7 @@ def init_spec_matrix
     end
 
     # Analyze
-    nb_threads = 1
+    nb_threads = 2
     threads = (1..nb_threads).map do |i|
         Thread.new(i) do |i|
             idx = 0
