@@ -84,9 +84,9 @@ def process_spec(spec)
     spec[:versions].each do |version|
         if doc.document_versions.where(version[:hash]).count == 0
             puts "\t\tCreating version #{version[:hash]}".yellow
-            version = doc.document_versions.create(version[:hash])
-            version.release = version[:release]
-            version.save!
+            doc_version = doc.document_versions.create(version[:hash])
+            doc_version.release = version[:release]
+            doc_version.save!
         else
             puts "\t\tFound version #{version[:hash]}".cyan
         end
@@ -145,6 +145,7 @@ def init_spec_matrix
                             :hash => version_hash,
                             :release => releases[idx] 
                         } 
+                        raise "Unknown rel #{idx}" if version_info[:release].nil?
                         spec[:versions].push version_info
                     end
 
@@ -160,7 +161,7 @@ def init_spec_matrix
     end
 
     # Analyze
-    nb_threads = 5
+    nb_threads = 1
     threads = (1..nb_threads).map do |i|
         Thread.new(i) do |i|
             idx = 0
@@ -170,8 +171,8 @@ def init_spec_matrix
 
                 begin
                     process_spec specs[spec_idx]
-                rescue
-                    puts "Error while parsing #{spec_idx}"
+                rescue Exception => e
+                    puts "Error while parsing #{spec_idx}: #{e}"
                 end
 
                 idx += 1

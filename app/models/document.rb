@@ -34,7 +34,8 @@ class Document < ActiveRecord::Base
   end
 
   def name_3gpp
-    n  = "%02d%02d" % [spec_serie.index, spec_number]
+    n  = "%02d" % spec_serie.index
+    n += ( spec_serie.index < 13 ? "%02d" : "%03d" ) % spec_number
     n += "-#{spec_part}" if !spec_part.nil?
     n
   end

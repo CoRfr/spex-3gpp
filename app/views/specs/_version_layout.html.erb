@@ -6,7 +6,7 @@
 </div>
 <div id="nav">
   <span class="left-arrow">
-    <%= link_to ('<span class="v_v">v</span><span class="v_release">' + @version.editorial.to_s + '</span>.' + @version.major.to_s + '.' + @version.technical.to_s).html_safe, specs_res_url( {
+    <%= link_to ('<span class="v_v">v</span><span class="v_release">' + @version.major.to_s + '</span>.' + @version.technical.to_s + '.' + @version.editorial.to_s).html_safe, specs_res_url( {
                         :serie => @spec.spec_serie.index,
                         :spec => @spec.name.gsub('.','_') } ) %>
   </span>

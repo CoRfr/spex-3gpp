@@ -2,10 +2,10 @@
     <h4><%= @spec.name %>: <i><%= @spec.title %></i></h4>
     <h5><%= link_to "Info Page @ 3GPP", @spec.info_page_url %></h5>
     <table class="data-table">
-        <% last_rel = 0 %>
-        <% for vers in @spec.document_versions.order(id: :desc) %>
-            <% if last_rel < vers.editorial %>
-                <% last_rel = vers.editorial %>
+        <% last_rel = 1000 %>
+        <% for vers in @spec.document_versions.order('major DESC, technical DESC, editorial DESC') %>
+            <% if last_rel > vers.major %>
+                <% last_rel = vers.major %>
                 <tr class="sub-header"><td colspan="4"><%= vers.release.name %></td></tr>
             <% end %>
             <tr>

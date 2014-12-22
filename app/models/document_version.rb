@@ -1,5 +1,5 @@
 class DocumentVersion < ActiveRecord::Base
-  attr_accessible :editorial, :major, :technical
+  attr_accessible :major, :technical, :editorial
 
   belongs_to :release
   belongs_to :document
@@ -18,9 +18,9 @@ class DocumentVersion < ActiveRecord::Base
     m = version.match(/(\d+)[\._](\d+)[\._](\d+)/)
 
     res = {
-        :editorial => m[1].to_i,
-        :major => m[2].to_i,
-        :technical => m[3].to_i
+        :major => m[1].to_i,
+        :technical => m[2].to_i,
+        :editorial => m[3].to_i
     }
   end
 
@@ -28,11 +28,11 @@ class DocumentVersion < ActiveRecord::Base
     case format
       when :letters then
         "%s%s%s" % [
-          DocumentVersion.chars_version[editorial],
           DocumentVersion.chars_version[major],
-          DocumentVersion.chars_version[technical]
+          DocumentVersion.chars_version[technical],
+          DocumentVersion.chars_version[editorial]
         ]
-      else "v#{editorial}.#{major}.#{technical}"
+      else "v#{major}.#{technical}.#{editorial}"
     end
   end
 
@@ -86,8 +86,8 @@ private
     end
 
     url_path += "1#{doc_nb}/"
-    url_path += "%02d.%02d.%02d_60/" % [editorial,major,technical]
-    url_path += "ts_1#{doc_nb}v%02d%02d%02dp.pdf" % [editorial,major,technical]
+    url_path += "%02d.%02d.%02d_60/" % [major,technical,editorial]
+    url_path += "ts_1#{doc_nb}v%02d%02d%02dp.pdf" % [major,technical,editorial]
 
     begin
       puts "... from #{url_path}".yellow
