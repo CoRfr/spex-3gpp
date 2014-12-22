@@ -1,4 +1,3 @@
 #!/bin/sh
 
-cd /home/app/webapp
-rake db:migrate
+su -c /bin/bash - app -c "( RAILS_ENV=production cd /home/app/webapp && bundle exec rake db:migrate )"
