@@ -14,6 +14,7 @@ RUN apt-get -y update && apt-get install -V -y libpoppler-glib-dev
 
 # app
 ADD . /home/app/webapp
+RUN rm -f /etc/nginx/sites-enabled/default
 RUN mv /home/app/webapp/docker/webapp.conf /etc/nginx/sites-enabled/webapp.conf
 RUN mv /home/app/webapp/docker/database.yml /home/app/webapp/config/database.yml
 
