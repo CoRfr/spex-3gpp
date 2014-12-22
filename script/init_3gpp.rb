@@ -126,7 +126,8 @@ def init_spec_matrix
                             puts "\t\tFound version #{version_hash}".cyan
                         end
 
-                        puts doc.document_versions.where(version_hash).first.retrieve_format :pdf
+                        # Auto cache PDF
+                        #puts doc.document_versions.where(version_hash).first.retrieve_format :pdf
                     end
 
                     idx += 1
