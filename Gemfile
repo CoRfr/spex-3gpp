@@ -21,12 +21,11 @@ group :assets do
 end
 
 gem 'jquery-rails'
-
-gem 'jquery-rails'
 gem 'awesome_print'
 gem 'colored'
 gem 'nokogiri'
 gem 'rubyzip'
+gem "zip-zip"
 gem 'poppler'
 
 gem 'wirble'
@@ -44,4 +43,4 @@ gem 'wirble'
 # gem 'capistrano'
 
 # To use debugger
-gem 'debugger'
+#gem 'debugger'

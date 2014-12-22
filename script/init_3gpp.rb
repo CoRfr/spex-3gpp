@@ -26,7 +26,7 @@ def init_spec_numbering
     puts "Init ... spec numbering".cyan
 
     source_page = "http://www.3gpp.org/specification-numbering"
-    source_path = '//*[@id="main"]/div[2]/table/tbody/tr'
+    source_path = '/html/body/div/div[2]/div[5]/div/table/tbody/tr'
 
     source_html = Nokogiri::HTML(open(source_page))
 
@@ -64,8 +64,8 @@ end
 def init_spec_matrix
     puts "Init ... spec matrix".cyan
 
-    # source_page = "http://www.3gpp.org/ftp/Specs/html-info/SpecReleaseMatrix.htm"
-    source_page = "SpecReleaseMatrix.htm"
+    source_page = "http://www.3gpp.org/ftp/Specs/html-info/SpecReleaseMatrix.htm"
+    # source_page = "SpecReleaseMatrix.htm"
 
     source_html = Nokogiri::HTML(open(source_page))
 
@@ -74,7 +74,7 @@ def init_spec_matrix
     # Header
     puts "Releases".cyan
 
-    source_path = "/html/body/table/tr[@bgcolor = \"#BEF781\"]"
+    source_path = '//*[@id="a3dyntab"]/thead/tr'
     source_html.xpath(source_path).first.elements[3..-1].each do |elmt|
         puts elmt.text.red
         release = Release.find_or_create_by_name(elmt.text)
@@ -82,7 +82,7 @@ def init_spec_matrix
     end
 
     # Content
-    source_path = "/html/body/table/tr[@bgcolor != \"#BEF781\"]"
+    source_path = '//*[@id="a3dyntab"]/tbody/tr'
     source_html.xpath(source_path).each do |elmt|
         if not elmt.xpath("td[2]").text[/withdrawn/]
 
@@ -126,7 +126,7 @@ def init_spec_matrix
                             puts "\t\tFound version #{version_hash}".cyan
                         end
 
-                        puts doc.document_versions.where(version_hash).first.retreive_pdf
+                        puts doc.document_versions.where(version_hash).first.retrieve_format :pdf
                     end
 
                     idx += 1
@@ -148,7 +148,7 @@ if __FILE__ == $0
 
     a = Time.now
     
-    #init_spec_numbering()
+    init_spec_numbering()
     init_spec_matrix()
 
     b = Time.now

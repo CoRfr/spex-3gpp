@@ -13,7 +13,7 @@
                                 :version => @version.version.gsub('.','_'),
                                 :format => file.format } ) %> (<%= file.size_h %>)
                     <% else %>
-                        <%= link_to "Retreive #{format}", specs_res_url( {
+                        <%= link_to "Retrieve #{format}", specs_res_url( {
                                 :serie => @spec.spec_serie.index,
                                 :spec => @spec.name.gsub('.','_'),
                                 :version => @version.version.gsub('.','_'),

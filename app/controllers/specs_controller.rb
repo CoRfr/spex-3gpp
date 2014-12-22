@@ -53,32 +53,13 @@ class SpecsController < ApplicationController
 
                         if params["format"].nil?
                             @content_partial = "version_layout"
-
-                            @doc_pdf = @version.get_file(:pdf)
-
-                            if not @doc_pdf.nil?
-                                if @doc_pdf.document_tocs.count == 0
-                                    @version.analyze_pdf
-                                end
-
-                                if @version.has_format? :html
-                                    @doc_html = DocumentPdfHtml.new @version.get_file(:html).local_path
-                                elsif !@doc_pdf.nil?
-                                    @version.retreive_format(:html)
-                                    html_file = @version.get_file(:html)
-                                    if !html_file.nil?
-                                        @doc_html = DocumentPdfHtml.new @version.get_file(:html).local_path
-                                    end
-                                end
-                            end
-
                             render :version
                         else
                             respond_to do |format|
                                 format.any(:html, :pdf, :doc) {
                                     file_format = params["format"].to_sym
 
-                                    if @version.has_format?(file_format) or @version.retreive_format(file_format)
+                                    if @version.has_format?(file_format) or @version.retrieve_format(file_format)
                                         send_file @version.get_file(file_format).local_path, :disposition => 'inline'
                                     else
                                         redirect_to specs_res_url( {
@@ -86,7 +67,7 @@ class SpecsController < ApplicationController
                                             :spec => params["spec"],
                                             :version => params["version"]
                                             }),
-                                            :notice => "Unable to retreive format #{file_format}"
+                                            :notice => "Unable to retrieve format #{file_format}"
                                     end
                                 }
                             end

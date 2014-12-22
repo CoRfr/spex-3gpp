@@ -45,12 +45,12 @@ class DocumentVersion < ActiveRecord::Base
     document_files.where(:format => format).first
   end
 
-  def retreive_format(format)
+  def retrieve_format(format)
 
     case format
-      when :pdf   then return retreive_pdf
-      when :html  then return retreive_html
-      when :doc   then return retreive_doc
+      when :pdf   then return retrieve_pdf
+      when :html  then return retrieve_html
+      when :doc   then return retrieve_doc
       else raise "Unknown format #{format}"
     end
 
@@ -68,7 +68,7 @@ class DocumentVersion < ActiveRecord::Base
 private
 
   # Get PDF from ETSI servers
-  def retreive_pdf
+  def retrieve_pdf
     puts "Getting PDF".green
 
     spec_serie = document.spec_serie.index
@@ -121,10 +121,10 @@ private
     false
   end
 
-  def retreive_html
+  def retrieve_html
     puts "Getting HTML".green
 
-    if !has_format? :pdf and !retreive_pdf
+    if !has_format? :pdf and !retrieve_pdf
       return false
     end
 
@@ -141,7 +141,7 @@ private
     end
   end
 
-  def retreive_doc
+  def retrieve_doc
     puts "Getting DOC".green
 
     spec_serie = document.spec_serie.index

@@ -51,7 +51,10 @@ class Document < ActiveRecord::Base
 
     res = Document.parse_no(spec_no)
 
-    self.spec_serie_id = SpecSerie.find_by_index(res[:serie]).id
+    spec_serie = SpecSerie.find_by_index(res[:serie])
+    raise "Unable to find serie for #{spec_no}" if spec_serie.nil?
+
+    self.spec_serie_id = spec_serie.id
 
     self.spec_part = res[:part] if not res[:part].nil?
     self.spec_number = res[:number]
