@@ -61,6 +61,41 @@ def init_spec_numbering
 
 end
 
+def process_spec(spec)
+
+    # For each Document
+    doc = Document.find_or_initialize_by_name(spec[:no])
+    if doc.new_record?
+        puts "\tCreating document #{spec[:no]}".yellow
+        # If we need to make this
+        doc.title = spec[:title]
+        doc.parse_no(spec[:no])
+
+        doc.save!
+    else
+        puts "\tFound document #{spec[:no]} => #{doc.id}".cyan
+
+        if doc.spec_serie_id.nil?
+            doc.parse_no(spec[:no])
+            doc.save!
+        end
+    end
+
+    spec[:versions].each do |version|
+        if doc.document_versions.where(version[:hash]).count == 0
+            puts "\t\tCreating version #{version[:hash]}".yellow
+            version = doc.document_versions.create(version[:hash])
+            version.release = version[:release]
+            version.save!
+        else
+            puts "\t\tFound version #{version[:hash]}".cyan
+        end
+
+        # Auto cache PDF
+        #puts doc.document_versions.where(version_hash).first.retrieve_format :pdf
+    end
+end
+
 def init_spec_matrix
     puts "Init ... spec matrix".cyan
 
@@ -81,6 +116,8 @@ def init_spec_matrix
         releases.push(release)
     end
 
+    specs = []
+
     # Content
     source_path = '//*[@id="a3dyntab"]/tbody/tr'
     source_html.xpath(source_path).each do |elmt|
@@ -92,63 +129,68 @@ def init_spec_matrix
             spec_wg = elmt.elements[2].text.strip
 
             if ARGV.length == 0 or spec_no.starts_with? ARGV[0]
-
-                # For each Document
-                doc = Document.find_or_initialize_by_name(spec_no)
-                if doc.new_record?
-                    puts "\tCreating document #{spec_no}".yellow
-                    # If we need to make this
-                    doc.title = spec_title
-                    doc.parse_no(spec_no)
-
-                    doc.save!
-                else
-                    puts "\tFound document #{spec_no} => #{doc.id}".cyan
-
-                    if doc.spec_serie_id.nil?
-                        doc.parse_no(spec_no)
-                        doc.save!
-                    end
-                end
+                spec = {
+                    :no => spec_no,
+                    :title => spec_title,
+                    :wg => spec_wg,
+                    :versions => []
+                }
 
                 # For each Version
                 idx = 0
                 elmt.elements[3..-1].each do |elmt|
                     if (not elmt.text.empty?) and (elmt.text != "none")
                         version_hash = DocumentVersion.parse_version(elmt.text)
-
-                        if doc.document_versions.where(version_hash).count == 0
-                            puts "\t\tCreating version #{version_hash}".yellow
-                            version = doc.document_versions.create(version_hash)
-                            version.release = releases[idx]
-                            version.save!
-                        else
-                            puts "\t\tFound version #{version_hash}".cyan
-                        end
-
-                        # Auto cache PDF
-                        #puts doc.document_versions.where(version_hash).first.retrieve_format :pdf
+                        version_info = {
+                            :hash => version_hash,
+                            :release => releases[idx] 
+                        } 
+                        spec[:versions].push version_info
                     end
 
                     idx += 1
                 end
+
+                specs.push spec
             end
 
         else
             #puts elmt.xpath("td[1]").text.red
         end
     end
+
+    # Analyze
+    nb_threads = 5
+    threads = (1..nb_threads).map do |i|
+        Thread.new(i) do |i|
+            idx = 0
+            loop do
+                spec_idx = (idx * nb_threads) + i
+                break if spec_idx >= specs.length 
+
+                begin
+                    process_spec specs[spec_idx]
+                rescue
+                    puts "Error while parsing #{spec_idx}"
+                end
+
+                idx += 1
+            end
+        end
+    end
+
+    threads.each {|t| t.join}
 end
 
 # Script
 if __FILE__ == $0
 
     puts 'Init 3GPP'.green
-  
+
     load_rails()
 
     a = Time.now
-    
+
     init_spec_numbering()
     init_spec_matrix()
 

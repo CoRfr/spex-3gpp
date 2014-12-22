@@ -4,12 +4,10 @@
 #   Ensure the SQLite 3 gem is defined in your Gemfile
 #   gem 'sqlite3'
 development:
-  adapter: mysql2  # Rails 3.x uses the mysql2 adapter
-  encoding: utf8
-  host: msf-wgge-lnx01.mstarsemi.fr
-  username: spex
-  password: Lb3FK8T8LE4sh4vJ
-  database: spex_dev
+  adapter: sqlite3
+  database: db/dev.sqlite3
+  pool: 5
+  timeout: 5000
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -21,11 +19,7 @@ test:
   timeout: 5000
 
 production:
-  adapter: mysql2  # Rails 3.x uses the mysql2 adapter
-  encoding: utf8
-  database: spex_prod
+  adapter: sqlite3
+  database: db/prod.sqlite3
   pool: 5
-  username: spex
-  password: Lb3FK8T8LE4sh4vJ
-  host: msf-wgge-lnx01.mstarsemi.fr
-  port: 3306
+  timeout: 5000

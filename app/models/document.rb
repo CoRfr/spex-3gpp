@@ -8,6 +8,7 @@ class Document < ActiveRecord::Base
   def self.parse_no(spec_no)
 
     m = spec_no.match(/(\d+)[\._](\d+)(?:-(\d))?(U)?/)
+    raise "Unable to parse '#{spec_no}'" if not m
 
     res = {
         :serie => m[1].to_i,
