@@ -5,7 +5,7 @@
 
         <% i = 0 %>
         <% doc_count = @serie.documents.count %>
-        <% @serie.documents.each_with_index do |spec, index| %>
+        <% @serie.documents.order(:spec_number).each_with_index do |spec, index| %>
             <% block_end = false %>
 
             <% # Bug with multi-spaces in documents %>

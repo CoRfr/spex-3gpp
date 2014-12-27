@@ -1,11 +1,11 @@
 <ul id="scopes" class="data-block">
-    <% for scope in SpecScope.all %>
+    <% SpecScope.all.each do |scope| %>
         <%  cls = "block"
             cls += " expanded" if scope.id == 3 %>
         <li class="<%= cls %>">
             <h4 class="header"><a><%= scope.scope %></a></h4>
             <table class="data-table">
-                <% for serie in scope.spec_series %>
+                <% scope.spec_series.each do |serie| %>
                     <tr>
                         <td><%= link_to "#{serie.index} Series", specs_res_url(:serie => serie.index) %></td>
                         <td><%= serie.subject %></td>
