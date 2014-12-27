@@ -69,14 +69,14 @@ def process_spec(spec)
         puts "\tCreating document #{spec[:no]}".yellow
         # If we need to make this
         doc.title = spec[:title]
-        doc.parse_no(spec[:no])
+        doc.parse_no
 
         doc.save!
     else
         puts "\tFound document #{spec[:no]} => #{doc.id}".cyan
 
         if doc.spec_serie_id.nil?
-            doc.parse_no(spec[:no])
+            doc.parse_no
             doc.save!
         end
     end
@@ -192,7 +192,8 @@ if __FILE__ == $0
 
     a = Time.now
 
-    init_spec_numbering()
+    init_spec_numbering() if ARGV.length == 0
+
     init_spec_matrix()
 
     b = Time.now
