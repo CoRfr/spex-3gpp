@@ -1,6 +1,4 @@
 class DocumentFile < ActiveRecord::Base
-    attr_accessible :format, :sha1, :size
-
     belongs_to :document_version
 
     has_many :document_tocs

@@ -1,6 +1,4 @@
 class DocumentVersion < ActiveRecord::Base
-  attr_accessible :major, :technical, :editorial
-
   belongs_to :release
   belongs_to :document
 

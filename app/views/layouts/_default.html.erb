@@ -1,5 +1,7 @@
 <div id="header">
-    <%= image_tag "logo.png", :class => "logo" %>
+    <%= link_to root_path do %>
+      <%= image_tag "logo.png", :class => "logo" %>
+    <% end %>
     <span class="main-title"><%= @main_title %></span><br />
     <span class="sub-title"><%= @sub_title %></span>
 </div>

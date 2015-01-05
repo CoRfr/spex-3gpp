@@ -1,5 +1,4 @@
 class Document < ActiveRecord::Base
-  attr_accessible :name, :title, :description, :spec_serie_id, :spec_number, :spec_part
   attr_reader :desc
 
   belongs_to :spec_serie
@@ -61,14 +60,14 @@ class Document < ActiveRecord::Base
   end
 
   def parse_no
-    spec_serie = SpecSerie.find_by_index(res[:serie])
+    spec_serie = SpecSerie.find_by_index(desc[:serie])
     raise "Unable to find serie for #{name}" if spec_serie.nil?
 
     spec_serie_id = spec_serie.id
 
-    spec_part = res[:part] if not res[:part].nil?
-    spec_number = res[:number]
+    spec_part = desc[:part] if not desc[:part].nil?
+    spec_number = desc[:number]
 
-    res
+    desc
   end
 end

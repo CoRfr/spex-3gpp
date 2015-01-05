@@ -49,8 +49,7 @@ def init_spec_numbering
 
                 puts num.to_s.green
 
-                SpecSerie.find_or_create_by(index: num) do |spec|
-                    spec.spec_scope_id = scopes[i]
+                SpecSerie.find_or_create_by( { index: num, spec_scope_id: scopes[i] } ) do |spec|
                     spec.subject = title
                 end
             end
@@ -63,7 +62,7 @@ end
 def process_spec(spec)
 
     # For each Document
-    doc = Document.find_or_initialize_by_name(spec[:no])
+    doc = Document.find_or_initialize_by(name: spec[:no])
     if doc.new_record?
         puts "\tCreating document #{spec[:no]}".yellow
         # If we need to make this
@@ -111,7 +110,7 @@ def init_spec_matrix
     source_path = '//*[@id="a3dyntab"]/thead/tr'
     source_html.xpath(source_path).first.elements[3..-1].each do |elmt|
         puts elmt.text.red
-        release = Release.find_or_create_by_name(elmt.text)
+        release = Release.find_or_create_by(name: elmt.text)
         releases.push(release)
     end
 
@@ -160,7 +159,7 @@ def init_spec_matrix
     end
 
     # Analyze
-    nb_threads = 2
+    nb_threads = 1
     threads = (1..nb_threads).map do |i|
         Thread.new(i) do |i|
             idx = 0
