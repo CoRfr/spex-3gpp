@@ -49,16 +49,15 @@ def init_spec_numbering
 
                 puts num.to_s.green
 
-                SpecSerie.create( {
-                    :index => num,
-                    :spec_scope_id => scopes[i],
-                    :subject => title })
+                SpecSerie.find_or_create_by(index: num) do |spec|
+                    spec.spec_scope_id = scopes[i]
+                    spec.subject = title
+                end
             end
 
             i += 1
         end
     end
-
 end
 
 def process_spec(spec)

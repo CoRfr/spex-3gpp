@@ -1,12 +1,14 @@
 class Document < ActiveRecord::Base
   attr_accessible :name, :title, :description, :spec_serie_id, :spec_number, :spec_part
+  attr_reader :desc
 
   belongs_to :spec_serie
 
   has_many :document_versions
 
-  def self.parse_no(spec_no)
+  after_initialize :init_desc
 
+  def self.parse_no(spec_no)
     m = spec_no.match(/(\d+)[\._](\d+)(?:-(\d))?(U)?/)
     raise "Unable to parse '#{spec_no}'" if not m
 
@@ -38,13 +40,20 @@ class Document < ActiveRecord::Base
     self.find_by_name(name)
   end
 
+  def init_desc
+    @desc = Document.parse_no(name)
+  end
+
   def name_3gpp
-    desc = parse_no
     n  = "%02d" % spec_serie.index
-    n += ( spec_serie.index < 13 or desc[:u] ? "%02d" : "%03d" ) % spec_number
+    n += full_spec_number
     n += "-#{spec_part}" if !spec_part.nil?
     n += "U" if desc[:u]
     n
+  end
+
+  def full_spec_number
+    ( ( spec_serie.index < 13 or desc[:u] ) ? "%02d" : "%03d" ) % spec_number
   end
 
   def info_page_url
@@ -52,16 +61,13 @@ class Document < ActiveRecord::Base
   end
 
   def parse_no
-
-    res = Document.parse_no(name)
-
     spec_serie = SpecSerie.find_by_index(res[:serie])
     raise "Unable to find serie for #{name}" if spec_serie.nil?
 
-    self.spec_serie_id = spec_serie.id
+    spec_serie_id = spec_serie.id
 
-    self.spec_part = res[:part] if not res[:part].nil?
-    self.spec_number = res[:number]
+    spec_part = res[:part] if not res[:part].nil?
+    spec_number = res[:number]
 
     res
   end

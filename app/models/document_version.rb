@@ -151,11 +151,11 @@ private
 
     if document.spec_part.nil?
         suffix = document.name.end_with?("U") ? "U" : ""
-        url_path += "%02d.%02d%s/" % [spec_serie,document.spec_number,suffix]
-        url_path += "%02d%02d%s-%s.zip" % [spec_serie,document.spec_number,suffix,version(:letters)]
+        url_path += "%02d.%s%s/" % [spec_serie,document.full_spec_number,suffix]
+        url_path += "%02d%s%s-%s.zip" % [spec_serie,document.full_spec_number,suffix,version(:letters)]
       else
-        url_path += "%02d.%02d-%d/" % [spec_serie,document.spec_number,document.spec_part]
-        url_path += "%02d%02d-%d-%s.zip" % [spec_serie,document.spec_number,document.spec_part,version(:letters)]
+        url_path += "%02d.%s-%d/" % [spec_serie,document.full_spec_number,document.spec_part]
+        url_path += "%02d%s-%d-%s.zip" % [spec_serie,document.full_spec_number,document.spec_part,version(:letters)]
     end
 
     begin

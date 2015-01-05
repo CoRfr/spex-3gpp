@@ -58,7 +58,7 @@ class SpecsController < ApplicationController
                             respond_to do |format|
                                 format.any(:html, :pdf, :doc) {
                                     file_format = params["format"].to_sym
-
+                                    ap @version
                                     if @version.has_format?(file_format) or @version.retrieve_format(file_format)
                                         send_file @version.get_file(file_format).local_path, :disposition => 'inline'
                                     else
