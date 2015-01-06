@@ -6,6 +6,6 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-SpecScope.find_or_create_by_scope("GSM only (< Rel-4)")
-SpecScope.find_or_create_by_scope("GSM only (>= Rel-4)")
-SpecScope.find_or_create_by_scope("3G and beyond / GSM (R99 and later)")
+SpecScope.find_or_create_by(scope: "GSM only (< Rel-4)")
+SpecScope.find_or_create_by(scope: "GSM only (>= Rel-4)")
+SpecScope.find_or_create_by(scope: "3G and beyond / GSM (R99 and later)")
