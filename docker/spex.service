@@ -8,5 +8,10 @@ TimeoutStartSec=0
 ExecStartPre=-/usr/bin/docker kill spex
 ExecStartPre=-/usr/bin/docker rm spex
 ExecStartPre=/usr/bin/docker pull corfr/spex
-ExecStart=/usr/bin/docker run --name spex -v /storage/web/specs:/home/app/webapp/specs -v /var/run/mysqld/mysqld.sock:/var/run/mysqld/mysqld.sock -p 127.0.0.1:21080:80 corfr/spex
+ExecStart=/usr/bin/docker run \
+                  --name spex \
+                  -v /storage/web/specs:/home/app/webapp/specs \
+                  -v /var/run/mysqld/mysqld.sock:/var/run/mysqld/mysqld.sock \
+                  -p 127.0.0.1:21080:80
+                  corfr/spex
 ExecStop=/usr/bin/docker kill spex

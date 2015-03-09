@@ -21,7 +21,11 @@ test:
 production:
   adapter: mysql2
   encoding: utf8
-  database: spex_prod
-  username: spex
+  database: <%= ENV['MYSQL_ENV_DB_NAME'] %>
+  username: <%= ENV['MYSQL_ENV_DB_USER'] %>
+  password: <%= ENV['MYSQL_ENV_DB_PASS'] %>
+  host:     <%= ENV['MYSQL_PORT_3306_TCP_ADDR'] %>
+  port:     <%= ENV['MYSQL_PORT_3306_TCP_PORT'] %>
+  socket:   <%= ENV['MYSQL_PORT'] %>
   pool: 5
-  socket: /var/run/mysqld/mysqld.sock 
+

@@ -18,13 +18,13 @@
                     <td class="icon-link">
                         <% if vers.has_format? format %>
                             <%= file = vers.get_file format
-                                link_to image_tag("icon-#{format}.png"), specs_res_url( {
+                                link_to image_tag asset_path("icon-#{format}.png"), specs_res_url( {
                                     :serie => @spec.spec_serie.index,
                                     :spec => @spec.name.gsub('.','_'),
                                     :version => vers.version.gsub('.','_'),
                                     :format => file.format } ) %>
                         <% else %>
-                            <%= link_to image_tag("icon-#{format}-gray.png"), specs_res_url( {
+                            <%= link_to image_tag asset_path("icon-#{format}-gray.png"), specs_res_url( {
                                     :serie => @spec.spec_serie.index,
                                     :spec => @spec.name.gsub('.','_'),
                                     :version => vers.version.gsub('.','_'),

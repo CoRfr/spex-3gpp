@@ -1,5 +1,5 @@
 <div id="header">
-    <%= image_tag "logo.png", :class => "logo" %>
+    <%= image_tag asset_path("logo.png"), :class => "logo" %>
     <span class="main-title"><%= link_to @spec.name, specs_res_url( {
                         :serie => @spec.spec_serie.index } ), :title => "#{@spec.spec_serie.index} Series" %></span><br />
     <span class="sub-title"><%= @spec.title %></span>
@@ -24,13 +24,13 @@
         <div class="icon">
             <% if @version.has_format? format %>
                 <%= file = @version.get_file format
-                    link_to image_tag("icon-#{format}.png"), specs_res_url( {
+                    link_to image_tag asset_path("icon-#{format}.png"), specs_res_url( {
                         :serie => @spec.spec_serie.index,
                         :spec => @spec.name.gsub('.','_'),
                         :version => @version.version.gsub('.','_'),
                         :format => file.format } ) %>
             <% else %>
-                <%= link_to image_tag("icon-#{format}-gray.png"), specs_res_url( {
+                <%= link_to image_tag asset_path("icon-#{format}-gray.png"), specs_res_url( {
                         :serie => @spec.spec_serie.index,
                         :spec => @spec.name.gsub('.','_'),
                         :version => @version.version.gsub('.','_'),
@@ -45,7 +45,6 @@
         <%= flash[:warning] || flash[:notice] %>
       </div>
     <% end %>
-    
     <%= yield %>
   </div>
 </div>
