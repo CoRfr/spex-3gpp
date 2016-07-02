@@ -10,14 +10,11 @@ ExecStartPre=-/usr/bin/docker rm spex
 ExecStartPre=/usr/bin/docker pull corfr/spex
 ExecStart=/usr/bin/docker run \
                   --name spex \
+                  --link mysql \
                   -e MYSQL_ENV_DB_NAME=${MYSQL_ENV_DB_NAME} \
                   -e MYSQL_ENV_DB_USER=${MYSQL_ENV_DB_USER} \
                   -e MYSQL_ENV_DB_PASS=${MYSQL_ENV_DB_PASS} \
-                  -e MYSQL_PORT_3306_TCP_ADDR=${MYSQL_PORT_3306_TCP_ADDR} \
-                  -e MYSQL_PORT_3306_TCP_PORT=${MYSQL_PORT_3306_TCP_PORT} \
-                  -e MYSQL_PORT=/var/run/mysqld/mysqld.sock \
                   -v /storage/web/specs:/home/app/webapp/specs \
-                  -v /var/run/mysqld/mysqld.sock:/var/run/mysqld/mysqld.sock \
-                  -p 127.0.0.1:21080:80 \
+                  -p 80:80 \
                   corfr/spex
 ExecStop=/usr/bin/docker kill spex

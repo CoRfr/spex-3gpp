@@ -24,8 +24,7 @@ production:
   database: <%= ENV['MYSQL_ENV_DB_NAME'] %>
   username: <%= ENV['MYSQL_ENV_DB_USER'] %>
   password: <%= ENV['MYSQL_ENV_DB_PASS'] %>
-  host:     <%= ENV['MYSQL_PORT_3306_TCP_ADDR'] %>
-  port:     <%= ENV['MYSQL_PORT_3306_TCP_PORT'] %>
-  socket:   <%= ENV['MYSQL_PORT'] %>
+  host:     <%= ENV['MYSQL_PORT_3306_TCP_ADDR'] || "mysql" %>
+  port:     <%= ENV['MYSQL_PORT_3306_TCP_PORT'] || "3306" %>
   pool: 5
 
