@@ -3,7 +3,7 @@
 # Provide db env vars to passenger
 for var in $(env |grep MYSQL | tr '=' ' ' |awk '{print $1}'); do
 	if [ -n "${!var}" ]; then
-		sed -i '$i'"passenger_set_cgi_param $var ${!var};" /etc/nginx/sites-enabled/webapp.conf
+		sed -i '$i'"passenger_env_var $var ${!var};" /etc/nginx/sites-enabled/webapp.conf
 	fi
 done
 
