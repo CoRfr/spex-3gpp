@@ -1,4 +1,65 @@
-FROM phusion/passenger-ruby21
+FROM ubuntu:18.04
+
+# Provide pdf2htmlEX
+RUN sed -i 's/# deb-src/deb-src/g' /etc/apt/sources.list && \
+    apt-get update && \
+    apt-get install -yy wget git xz-utils libpango1.0-dev m4 libtool libltdl-dev perl \
+                        libjpeg-dev libtiff5-dev libpng-dev libfreetype6-dev libgif-dev libgtk-3-dev \
+                        libxml2-dev libpango1.0-dev libcairo2-dev libspiro-dev libuninameslist-dev \
+                        python3-dev ninja-build cmake build-essential
+
+RUN cd /tmp && \
+    git clone https://github.com/fontforge/fontforge.git && \
+    cd fontforge && \
+    mkdir build && \
+    cd build && \
+    cmake -GNinja .. && \
+    ninja && \
+    ninja install && \
+    cd / && rm -rf /tmp/fontforge
+
+RUN cd /tmp && \
+    apt-get build-dep -yy libpoppler73 && \
+    git clone git://git.freedesktop.org/git/poppler/poppler && \
+    cd poppler && \
+    git checkout poppler-0.81.0 && \
+    mkdir build && \
+    cd build && \
+    cmake -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_INSTALL_PREFIX=/usr/local \
+          -DENABLE_LIBOPENJPEG=none .. && \
+    make -j && \
+    make install && \
+    cd .. && \
+    mkdir -p /usr/local/include/poppler/goo \
+             /usr/local/include/poppler/fofi \
+             /usr/local/include/poppler/splash && \
+    cp build/poppler/poppler-config.h /usr/local/include/poppler && \
+    cp poppler/*.h /usr/local/include/poppler && \
+    cp goo/*.h     /usr/local/include/poppler/goo && \
+    cp fofi/*.h    /usr/local/include/poppler/fofi && \
+    cp splash/*.h  /usr/local/include/poppler/splash && \
+    cd / && rm -rf /tmp/poppler
+
+RUN \
+    apt-get install -yy libfontforge-dev libfontconfig-dev
+
+RUN set -xe && \
+    cd /tmp && \
+    git clone --depth=1 https://github.com/pdf2htmlEX/pdf2htmlEX.git && \
+    cd pdf2htmlEX && \
+    export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig && \
+    mkdir build && \
+    cd build && \
+    cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr/local .. && \
+    make && \
+    make install && \
+    cd / && rm -rf /tmp/pdf2htmlEX
+
+FROM phusion/passenger-ruby26
+
+# pdf2htmlEX
+COPY --from=0 /usr/local /usr/local
 
 # Set correct environment variables.
 ENV HOME /root
@@ -6,36 +67,6 @@ ENV RAILS_ENV production
 
 # Use baseimage-docker's init process.
 CMD ["/sbin/my_init"]
-
-# Provide pdf2htmlEX
-RUN apt-get update && \
-    apt-get install -yy wget xz-utils libpango1.0-dev m4 libtool perl \
-                        autoconf automake coreutils python-dev zlib1g-dev libfreetype6-dev cmake && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN cd / && \
-    git clone https://github.com/BWITS/fontforge.git && \
-    cd fontforge && \
-    ./bootstrap --force && \
-    ./configure --without-iconv && \
-    make && \
-    make install && \
-    cd / && rm -rf /fontforge
-
-RUN cd / && \
-    git clone git://git.freedesktop.org/git/poppler/poppler && \
-    cd poppler && \
-    git checkout poppler-0.25.3 && \
-    ./autogen.sh --enable-xpdf-headers && \
-    make && sudo make install && \
-    cd / && rm -rf /poppler
-    
-RUN cd / && \
-    git clone --depth=1 git://github.com/coolwanglu/pdf2htmlEX.git && \
-    cd pdf2htmlEX && \
-    export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig && \
-    cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr . && make && sudo make install && \
-    cd / && rm -rf /pdf2htmlEX
 
 # nginx
 RUN rm -f /etc/service/nginx/down
@@ -53,7 +84,13 @@ RUN mkdir -p /etc/my_init.d
 RUN mv /home/app/webapp/docker/webapp.sh /etc/my_init.d/webapp.sh
 RUN chown -R app /home/app/webapp
 
+RUN \
+    apt-get update && \
+    apt-get install -yy libgirepository1.0-dev && \
+    gem install bundler
+
 USER app
-RUN cd /home/app/webapp && bundle install --path vendor/bundle
+RUN cd /home/app/webapp && \
+    bundle install --jobs 4 --path vendor/bundle
 
 USER root

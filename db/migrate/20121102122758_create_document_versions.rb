@@ -1,4 +1,4 @@
-class CreateDocumentVersions < ActiveRecord::Migration
+class CreateDocumentVersions < ActiveRecord::Migration[6.0]
   def change
     create_table :document_versions do |t|
       t.integer :major

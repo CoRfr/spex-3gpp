@@ -1,4 +1,4 @@
-class CreateReleases < ActiveRecord::Migration
+class CreateReleases < ActiveRecord::Migration[6.0]
   def change
     create_table :releases do |t|
       t.string :name

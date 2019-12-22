@@ -1,4 +1,4 @@
-class CreateDocumentTocs < ActiveRecord::Migration
+class CreateDocumentTocs < ActiveRecord::Migration[6.0]
   def change
     create_table :document_tocs do |t|
       t.integer :parent_id

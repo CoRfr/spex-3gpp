@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.0'
+gem 'rails', '6.0.2.1'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -28,6 +28,7 @@ gem 'nokogiri'
 gem 'rubyzip'
 gem "zip-zip"
 gem 'poppler'
+gem 'tzinfo-data'
 
 gem 'wirble'
 
@@ -47,3 +48,7 @@ gem 'responders'
 
 # To use debugger
 #gem 'debugger'
+#
+group :development do
+  gem 'listen'
+end

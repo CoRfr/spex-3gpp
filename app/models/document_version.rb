@@ -1,3 +1,5 @@
+require 'net/http'
+
 class DocumentVersion < ActiveRecord::Base
   belongs_to :release
   belongs_to :document
@@ -74,7 +76,7 @@ private
     lower_bound = ((document.spec_number)/100).to_i * 100
     higher_bound = lower_bound + 99
 
-    url_path  = "http://www.etsi.org/deliver/etsi_ts/"
+    url_path  = "https://www.etsi.org/deliver/etsi_ts/"
     url_path += "1%02d%03d_1%02d%03d/" % [spec_serie,lower_bound,spec_serie,higher_bound]
 
     if document.spec_part.nil?
@@ -90,17 +92,19 @@ private
     begin
       puts "... from #{url_path}".yellow
 
-      Net::HTTP.get_response( URI(url_path) ) { |res|
-        if res.is_a?(Net::HTTPSuccess)
+      uri = URI(url_path)
+      Net::HTTP.get_response(uri) { |res|
+        case res
+        when Net::HTTPSuccess then
           local_path = DocumentFile.get_local_path(self, :pdf)
           puts "Storing to #{local_path}"
 
           FileUtils.mkdir_p(local_path.dirname) unless File.exists?(local_path.dirname)
  
           File.open(local_path, "wb") { |io|
-              res.read_body do |segment|
-                  io.write(segment)
-              end
+            res.read_body do |segment|
+              io.write(segment)
+            end
           }
 
           doc_file = document_files.new
@@ -109,11 +113,13 @@ private
           doc_file.save
 
           return true
+        else
+          puts "    Unable to get PDF @ #{url_path}: #{res}".yellow
         end
       }
         
-    rescue
-      puts "Error getting PDF @ #{url_path}".red
+    rescue => e
+      puts "    Error getting PDF @ #{url_path}: #{e}".red
     end
 
     false
@@ -136,6 +142,8 @@ private
         doc_file.analyze
         doc_file.save
       end
+    rescue
+      puts "Unable to convert PDF #{path_pdf} to HTML"
     end
   end
 
@@ -144,7 +152,7 @@ private
 
     spec_serie = document.spec_serie.index
 
-    url_path  = "http://www.3gpp.org/ftp/Specs/archive/"
+    url_path  = "https://www.3gpp.org/ftp/Specs/archive/"
     url_path += "%02d_series/" % spec_serie
 
     if document.spec_part.nil?
@@ -161,7 +169,8 @@ private
       
       # Getting zip
       Net::HTTP.get_response( URI(url_path) ) { |res|
-        if res.is_a?(Net::HTTPSuccess)
+        case res
+        when Net::HTTPSuccess then
           local_path_zip = DocumentFile.get_local_path(self, :zip)
           local_path = DocumentFile.get_local_path(self, :doc)
 

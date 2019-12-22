@@ -6,7 +6,8 @@ class SpecsController < ApplicationController
 
         @page_name = "Specs"
         @url_options = {}
-        @title = "X"
+        title_base = "speX"
+        @title = title_base
 
         begin
             if params["serie"].nil?
@@ -17,7 +18,7 @@ class SpecsController < ApplicationController
 
                 @navs.push({ :name => @page_name, :link => specs_res_url(@url_options) })
                 @page_name = "#{@serie.index} Series"
-                @title += " :: #{@page_name}"
+                @title = "#{title_base} :: #{@page_name}"
                 @url_options[:serie] = params["serie"]
 
                 if params["spec"].nil?
@@ -34,7 +35,7 @@ class SpecsController < ApplicationController
 
                     @navs.push({ :name => @page_name, :link => specs_res_url(@url_options) })
                     @page_name = @spec.name
-                    @title = "X :: #{@page_name}"
+                    @title = "#{title_base} :: #{@page_name}"
                     @url_options[:spec] = params["spec"]
                     
                     if params["version"].nil?

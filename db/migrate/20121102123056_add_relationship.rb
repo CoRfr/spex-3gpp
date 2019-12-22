@@ -1,4 +1,4 @@
-class AddRelationship < ActiveRecord::Migration
+class AddRelationship < ActiveRecord::Migration[6.0]
   def change
   	# belongs_to :document
   	add_column :document_versions, :document_id, :integer

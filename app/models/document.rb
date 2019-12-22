@@ -44,9 +44,9 @@ class Document < ActiveRecord::Base
   end
 
   def name_3gpp
-    n  = "%02d" % spec_serie.index
+    n  = "%02d" % self.spec_serie.index
     n += full_spec_number
-    n += "-#{spec_part}" if !spec_part.nil?
+    n += "-#{self.spec_part}" if !self.spec_part.nil?
     n += "U" if desc[:u]
     n
   end
@@ -60,13 +60,14 @@ class Document < ActiveRecord::Base
   end
 
   def parse_no
-    spec_serie = SpecSerie.find_by_index(desc[:serie])
-    raise "Unable to find serie for #{name}" if spec_serie.nil?
+    begin
+      self.spec_serie = SpecSerie.find_by_index(desc[:serie])
+    rescue
+      raise "Unable to find serie #{desc[:serie]} for #{name}" if spec_serie.nil?
+    end
 
-    spec_serie_id = spec_serie.id
-
-    spec_part = desc[:part] if not desc[:part].nil?
-    spec_number = desc[:number]
+    self.spec_part = desc[:part] if not desc[:part].nil?
+    self.spec_number = desc[:number]
 
     desc
   end

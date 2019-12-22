@@ -1,4 +1,4 @@
-class CreateSpecSeries < ActiveRecord::Migration
+class CreateSpecSeries < ActiveRecord::Migration[6.0]
   def change
     create_table :spec_series do |t|
       t.integer :index
