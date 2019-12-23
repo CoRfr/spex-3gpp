@@ -1,12 +1,15 @@
-FROM ubuntu:18.04
+FROM phusion/passenger-ruby26
 
 # Provide pdf2htmlEX
 RUN sed -i 's/# deb-src/deb-src/g' /etc/apt/sources.list && \
     apt-get update && \
+    apt-get build-dep -yy libpoppler73 && \
     apt-get install -yy wget git xz-utils libpango1.0-dev m4 libtool libltdl-dev perl \
                         libjpeg-dev libtiff5-dev libpng-dev libfreetype6-dev libgif-dev libgtk-3-dev \
                         libxml2-dev libpango1.0-dev libcairo2-dev libspiro-dev libuninameslist-dev \
-                        python3-dev ninja-build cmake build-essential
+                        python3-dev ninja-build cmake build-essential \
+                        libfontforge-dev libfontconfig-dev && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN cd /tmp && \
     git clone https://github.com/fontforge/fontforge.git && \
@@ -16,10 +19,9 @@ RUN cd /tmp && \
     cmake -GNinja .. && \
     ninja && \
     ninja install && \
-    cd / && rm -rf /tmp/fontforge
+    cd && rm -rf /tmp/fontforge
 
 RUN cd /tmp && \
-    apt-get build-dep -yy libpoppler73 && \
     git clone git://git.freedesktop.org/git/poppler/poppler && \
     cd poppler && \
     git checkout poppler-0.81.0 && \
@@ -39,13 +41,9 @@ RUN cd /tmp && \
     cp goo/*.h     /usr/local/include/poppler/goo && \
     cp fofi/*.h    /usr/local/include/poppler/fofi && \
     cp splash/*.h  /usr/local/include/poppler/splash && \
-    cd / && rm -rf /tmp/poppler
+    cd && rm -rf /tmp/poppler
 
-RUN \
-    apt-get install -yy libfontforge-dev libfontconfig-dev
-
-RUN set -xe && \
-    cd /tmp && \
+RUN cd /tmp && \
     git clone --depth=1 https://github.com/pdf2htmlEX/pdf2htmlEX.git && \
     cd pdf2htmlEX && \
     export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig && \
@@ -54,12 +52,7 @@ RUN set -xe && \
     cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr/local .. && \
     make && \
     make install && \
-    cd / && rm -rf /tmp/pdf2htmlEX
-
-FROM phusion/passenger-ruby26
-
-# pdf2htmlEX
-COPY --from=0 /usr/local /usr/local
+    cd && rm -rf /tmp/pdf2htmlEX
 
 # Set correct environment variables.
 ENV HOME /root
@@ -92,5 +85,7 @@ RUN \
 USER app
 RUN cd /home/app/webapp && \
     bundle install --jobs 4 --path vendor/bundle
+
+ENV SECRET_KEY_BASE "nokey"
 
 USER root

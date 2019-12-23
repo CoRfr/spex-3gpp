@@ -18,3 +18,5 @@
 /specs/*
 
 /public/assets
+
+/config/master.key

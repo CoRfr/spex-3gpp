@@ -183,6 +183,8 @@ GEM
     tilt (2.0.10)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
+    tzinfo-data (1.2019.3)
+      tzinfo (>= 1.0.0)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
     websocket-driver (0.7.1)
@@ -212,6 +214,7 @@ DEPENDENCIES
   sass-rails
   sqlite3
   therubyracer
+  tzinfo-data
   uglifier (>= 1.0.3)
   wirble
   zip-zip
