@@ -84,7 +84,8 @@ RUN \
 
 USER app
 RUN cd /home/app/webapp && \
-    bundle install --jobs 4 --path vendor/bundle
+    bundle config set path 'vendor/bundle' && \
+    bundle install --jobs 4
 
 ENV SECRET_KEY_BASE "nokey"
 

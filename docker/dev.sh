@@ -7,14 +7,16 @@ if docker ps | grep spex-app; then
   docker rm spex-app
 fi
 
-if ! docker ps | grep mysql; then
+if ! docker ps -a | grep spex-mysql; then
   docker run \
     --name spex-mysql \
     -e DB_USER='spex'\
-    -e DB_PASS='' \
+    -e DB_PASS='spex' \
     -e DB_NAME='spex' \
     -d \
     sameersbn/mysql:latest
+
+  sleep 5
 fi
 
 TI=''

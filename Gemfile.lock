@@ -157,8 +157,11 @@ GEM
       actionpack (>= 5.0)
       railties (>= 5.0)
     rubyzip (2.0.0)
-    sass-rails (6.0.0)
-      sassc-rails (~> 2.1, >= 2.1.1)
+    sass (3.7.4)
+      sass-listen (~> 4.0.0)
+    sass-listen (4.0.0)
+      rb-fsevent (~> 0.9, >= 0.9.4)
+      rb-inotify (~> 0.9, >= 0.9.7)
     sassc (2.2.1)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
@@ -211,7 +214,8 @@ DEPENDENCIES
   rails (= 6.0.2.1)
   responders
   rubyzip
-  sass-rails
+  sass
+  sassc-rails
   sqlite3
   therubyracer
   tzinfo-data
