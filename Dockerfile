@@ -30,7 +30,7 @@ RUN cd /tmp && \
     cmake -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_INSTALL_PREFIX=/usr/local \
           -DENABLE_LIBOPENJPEG=none .. && \
-    make -j && \
+    make && \
     make install && \
     cd .. && \
     mkdir -p /usr/local/include/poppler/goo \
