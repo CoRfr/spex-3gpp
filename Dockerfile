@@ -84,7 +84,11 @@ ENV SECRET_KEY_BASE "nokey"
 USER app
 RUN cd /home/app/webapp && \
     bundle config set path 'vendor/bundle' && \
-    bundle install --jobs 4 && \
-    bundle exec rake assets:precompile
+    bundle install --jobs 4
+
+RUN cd /home/app/webapp && \
+    date && \
+    bundle exec rake assets:precompile && \
+    date
 
 USER root
