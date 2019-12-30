@@ -64,7 +64,9 @@ CMD ["/sbin/my_init"]
 # nginx
 RUN rm -f /etc/service/nginx/down
 
-RUN apt-get -y update && apt-get install -V -y libpoppler-glib-dev
+RUN apt-get update && \
+    apt-get install -V -yy libpoppler-glib-dev libgirepository1.0-dev && \
+    gem install bundler
 
 # app
 ADD . /home/app/webapp
@@ -77,16 +79,12 @@ RUN mkdir -p /etc/my_init.d
 RUN mv /home/app/webapp/docker/webapp.sh /etc/my_init.d/webapp.sh
 RUN chown -R app /home/app/webapp
 
-RUN \
-    apt-get update && \
-    apt-get install -yy libgirepository1.0-dev && \
-    gem install bundler
+ENV SECRET_KEY_BASE "nokey"
 
 USER app
 RUN cd /home/app/webapp && \
     bundle config set path 'vendor/bundle' && \
-    bundle install --jobs 4
-
-ENV SECRET_KEY_BASE "nokey"
+    bundle install --jobs 4 && \
+    bundle exec rake assets:precompile
 
 USER root

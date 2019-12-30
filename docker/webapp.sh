@@ -8,4 +8,3 @@ for var in $(env |grep MYSQL | tr '=' ' ' |awk '{print $1}'); do
 done
 
 su --preserve-environment -c /bin/bash - app -c "( export RAILS_ENV=production && cd /home/app/webapp && bundle exec rake db:migrate )"
-su --preserve-environment -c /bin/bash - app -c "( export RAILS_ENV=production && cd /home/app/webapp && bundle exec rake assets:precompile )"
