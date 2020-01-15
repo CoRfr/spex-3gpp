@@ -24,7 +24,7 @@ host:~$ docker run --name spex-mysql --network spex-net -e MYSQL_ROOT_PASSWORD=s
 ```
 ```
 # connect to the mysql container
-host:~$ docker run -it --network spex-net --rm mysql mysql -hspex-mysql -uroot -p
+host:~$ docker run -it --network spex-net --rm mysql mysql -h spex-mysql -u root -p
 # within mysql, create a new database
 spex-mysql:~$ mysql
 mysql> CREATE DATABASE spex;
@@ -37,12 +37,12 @@ host:~$ docker run --name spex --network spex-net -e MYSQL_ENV_DB_NAME=spex -e M
 
 On first run, you'll need to manually populate the database:
 ```
-host:~$ docker exec -ti spex bash
+host:~$ docker exec -ti -u app spex bash
 spex:~$ cd /home/app/webapp
-spex:webapp$ bundle exec rake db:setup
 # if the database cannot be setup, first disable the security checks
 spex:webapp$ export DISABLE_DATABASE_ENVIRONMENT_CHECK=1
-spex:webapp$ ./script/init_3gpp.rb
+spex:webapp$ bundle exec rake db:setup
+spex:webapp$ bundle exec /home/app/webapp/script/init_3gpp.rb
 ```
 
 The spex website is now available on `http://localhost:3000`
