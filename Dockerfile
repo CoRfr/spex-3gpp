@@ -56,9 +56,6 @@ RUN cd /tmp && \
     make install && \
     cd && rm -rf /tmp/pdf2htmlEX
 
-# TODO: Prevent pdf2htmlEX execution for now as it doesn't work
-RUN mv /usr/local/bin/pdf2htmlEX /usr/local/bin/pdf2htmlEX-notworking
-
 # Set correct environment variables.
 ENV HOME /root
 ENV RAILS_ENV production
