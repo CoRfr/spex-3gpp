@@ -11,14 +11,40 @@ Service is provided at http://spex.cor-net.org
 
 ### Using Docker
 
+The docker image is available as `corfr/spex` or from sources:
 ```
-docker run --name spex -p 80:80 corfr/spex
+host:spex$ docker build -t spex .
 ```
 
-Image can be built from sources:
+In the following we'll run the spex container along with a MySQL database.
+
+```console
+host:~$ docker network create spex-net
+host:~$ docker run --name spex-mysql --network spex-net -e MYSQL_ROOT_PASSWORD=spex -d mysql:latest
 ```
-docker build -t spex .
 ```
+# connect to the mysql container
+host:~$ docker run -it --network spex-net --rm mysql mysql -hspex-mysql -uroot -p
+# within mysql, create a new database
+spex-mysql:~$ mysql
+mysql> CREATE DATABASE spex;
+```
+
+Now we can start spex and point it to the MySQL database.
+```
+host:~$ docker run --name spex --network spex-net -e MYSQL_ENV_DB_NAME=spex -e MYSQL_ENV_DB_USER=root -e MYSQL_ENV_DB_PASS=spex -e MYSQL_PORT_3306_TCP_ADDR=spex-mysql -p 3000:80 corfr/spex
+```
+
+On first run, you'll need to manually populate the database:
+```
+host:~$ docker exec -ti spex bash
+spex:~$ cd /home/app/webapp
+spex:webapp$ bundle exec rake db:setup
+# if the database cannot be setup, first disable the security checks
+spex:webapp$ export DISABLE_DATABASE_ENVIRONMENT_CHECK=1
+```
+
+The spex website is now available on `http://localhost:3000`
 
 ### Using rake (development)
 
