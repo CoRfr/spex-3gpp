@@ -42,6 +42,7 @@ spex:~$ cd /home/app/webapp
 spex:webapp$ bundle exec rake db:setup
 # if the database cannot be setup, first disable the security checks
 spex:webapp$ export DISABLE_DATABASE_ENVIRONMENT_CHECK=1
+spex:webapp$ ./script/init_3gpp.rb
 ```
 
 The spex website is now available on `http://localhost:3000`
