@@ -11,18 +11,6 @@ RUN sed -i 's/# deb-src/deb-src/g' /etc/apt/sources.list && \
                         libfontforge-dev libfontconfig-dev && \
     rm -rf /var/lib/apt/lists/*
 
-# disable building fontforge manually, since fontforge-git is incompatible with pdf2html-git
-# for now, using the ubuntu version instead (libfontforge-dev)
-#RUN cd /tmp && \
-#    git clone https://github.com/fontforge/fontforge.git && \
-#    cd fontforge && \
-#    mkdir build && \
-#    cd build && \
-#    cmake -GNinja .. && \
-#    ninja && \
-#    ninja install && \
-#    cd && rm -rf /tmp/fontforge
-
 RUN cd /tmp && \
     git clone git://git.freedesktop.org/git/poppler/poppler && \
     cd poppler && \
