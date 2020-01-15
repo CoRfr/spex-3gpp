@@ -16,9 +16,10 @@ The docker image is available as `corfr/spex` or from sources:
 host:spex$ docker build -t spex .
 ```
 
-In the following we'll run the spex container along with a MySQL database.
+In the following we'll run the spex container. Along with it comes a MySQL database and a docker volume for data storage.
 
 ```console
+host:~$ docker volume create spex-storage
 host:~$ docker network create spex-net
 host:~$ docker run --name spex-mysql --network spex-net -e MYSQL_ROOT_PASSWORD=spex -d mysql:latest
 ```
@@ -30,9 +31,9 @@ spex-mysql:~$ mysql
 mysql> CREATE DATABASE spex;
 ```
 
-Now we can start spex and point it to the MySQL database.
+Now we can start spex, point it to the MySQL database, and mount the data storage.
 ```
-host:~$ docker run --name spex --network spex-net -e MYSQL_ENV_DB_NAME=spex -e MYSQL_ENV_DB_USER=root -e MYSQL_ENV_DB_PASS=spex -e MYSQL_PORT_3306_TCP_ADDR=spex-mysql -p 3000:80 corfr/spex
+host:~$ docker run --name spex --network spex-net -e MYSQL_ENV_DB_NAME=spex -e MYSQL_ENV_DB_USER=root -e MYSQL_ENV_DB_PASS=spex -e MYSQL_PORT_3306_TCP_ADDR=spex-mysql -v spex-storage:/home/app/webapp/specs -p 3000:80 corfr/spex
 ```
 
 On first run, you'll need to manually populate the database:
