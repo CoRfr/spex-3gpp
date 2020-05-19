@@ -75,6 +75,7 @@ RUN ln -s /home/app/webapp/docker/sync_job.sh /etc/cron.weekly/sync_job.sh
 ENV SECRET_KEY_BASE "nokey"
 
 USER app
+ENV HOME "/home/app/"
 RUN cd /home/app/webapp && \
     bundle config set path 'vendor/bundle' && \
     bundle install --jobs 4
