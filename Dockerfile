@@ -70,7 +70,9 @@ RUN mv /home/app/webapp/docker/webapp.sh /etc/my_init.d/webapp.sh
 RUN chown -R app /home/app/webapp
 
 # cron
-RUN ln -s /home/app/webapp/docker/sync_job.sh /etc/cron.weekly/sync_job.sh
+RUN cp /home/app/webapp/docker/sync_job.sh /etc/cron.weekly/sync_job && \
+    chown root:root /etc/cron.weekly/sync_job && \
+    chmod 755 /etc/cron.weekly/sync_job
 
 ENV SECRET_KEY_BASE "nokey"
 
