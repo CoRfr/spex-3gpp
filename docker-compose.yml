@@ -1,0 +1,39 @@
+version: '3.3'
+
+volumes:
+  db-volume:
+  spex-volume:
+
+networks:
+  backend:
+
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'spex'
+      MYSQL_USER: 'spex'
+      MYSQL_PASSWORD: 'spex'
+      MYSQL_ROOT_PASSWORD: 'spex'
+    networks:
+      - backend
+    volumes:
+      - db-volume:/var/lib/mysql
+  spex:
+    #image: corfr/spex
+    build: ./
+    restart: always
+    environment:
+      MYSQL_PORT_3306_TCP_ADDR: "db"
+      MYSQL_ENV_DB_PASS: 'spex'
+      MYSQL_ENV_DB_USER: 'spex'
+      MYSQL_ENV_DB_NAME: 'spex'
+    networks:
+      - backend
+    volumes:
+      - spex-volume:/home/app/webapp/specs
+    ports:
+      - "3000:80"
+
+

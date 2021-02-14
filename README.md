@@ -48,6 +48,27 @@ spex:webapp$ bundle exec /home/app/webapp/script/init_3gpp.rb
 
 The spex website is now available on `http://localhost:3000`
 
+### Using Docker Compose
+
+From the top-level directory:
+```
+docker-compose pull
+docker-compose build
+docker-compose up -d
+```
+
+On first run, you'll need to manually populate the database:
+```
+host:~$ docker-compose exec spex bash
+spex:~$ cd /home/app/webapp
+# if the database cannot be setup, first disable the security checks
+spex:webapp$ export DISABLE_DATABASE_ENVIRONMENT_CHECK=1
+spex:webapp$ bundle exec rake db:setup
+spex:webapp$ bundle exec /home/app/webapp/script/init_3gpp.rb
+```
+
+The spex website is now available on `http://localhost:3000`
+
 ### Using rake (development)
 
 ```
