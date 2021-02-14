@@ -1,4 +1,4 @@
-FROM phusion/passenger-ruby26
+FROM phusion/passenger-ruby26:1.0.11
 
 # Provide pdf2htmlEX
 RUN sed -i 's/# deb-src/deb-src/g' /etc/apt/sources.list && \
@@ -12,9 +12,8 @@ RUN sed -i 's/# deb-src/deb-src/g' /etc/apt/sources.list && \
     rm -rf /var/lib/apt/lists/*
 
 RUN cd /tmp && \
-    git clone git://git.freedesktop.org/git/poppler/poppler && \
+    git clone --depth=1 git://git.freedesktop.org/git/poppler/poppler -b poppler-0.81.0 && \
     cd poppler && \
-    git checkout poppler-0.81.0 && \
     mkdir build && \
     cd build && \
     cmake -DCMAKE_BUILD_TYPE=Release \
@@ -34,7 +33,7 @@ RUN cd /tmp && \
     cd && rm -rf /tmp/poppler
 
 RUN cd /tmp && \
-    git clone --depth=1 https://github.com/pdf2htmlEX/pdf2htmlEX.git && \
+    git clone --depth=1 https://github.com/pdf2htmlEX/pdf2htmlEX.git -b v0.18.7-poppler-0.81.0 && \
     cd pdf2htmlEX && \
     export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig && \
     mkdir build && \
